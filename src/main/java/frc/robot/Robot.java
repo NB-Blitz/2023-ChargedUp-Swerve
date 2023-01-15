@@ -1,12 +1,13 @@
-package com.swervedrivespecialties.exampleswerve;
+package frc.robot;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     private static OI oi;
 
+    @SuppressWarnings("unused")
     private static DrivetrainSubsystem drivetrain;
 
     public static OI getOi() {
@@ -21,6 +22,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
     }
 }

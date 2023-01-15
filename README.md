@@ -1,6 +1,6 @@
-# Example Swerve Project
+# 2023-ChargedUp-Swerve
 
-When using Swerve Drive Specialties MK2 modules this template code will provide a quick and simple way to get your robot driving.
+This template code will provide a quick and simple way to get your swerve robot driving.
 
 ## Electrical Hardware Setup
 

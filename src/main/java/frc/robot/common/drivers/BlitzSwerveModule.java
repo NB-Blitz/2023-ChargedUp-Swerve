@@ -87,7 +87,7 @@ public class BlitzSwerveModule extends SwerveModule {
     
     @Override
     protected double readAngle() {
-        return angleEncoder.getAbsolutePosition() + angleOffset;
+        return Math.toRadians(angleEncoder.getAbsolutePosition() + angleOffset);
     }
 
     @Override

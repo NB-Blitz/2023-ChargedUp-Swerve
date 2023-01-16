@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.*;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import frc.robot.RobotMap;
 import frc.robot.commands.DriveCommand;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.drivers.SwerveModule;
@@ -20,46 +20,38 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    private static final double TRACKWIDTH = 19.5;
-    private static final double WHEELBASE = 23.5;
-
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(0.0);
-    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(0.0);
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(0.0);
-    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(0.0);
-
     private static DrivetrainSubsystem instance;
 
     private final SwerveModule frontLeftModule = new BlitzSwerveModule(
         new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0),
         FRONT_LEFT_ANGLE_OFFSET,
-        new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANCoder(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER));
+        new CANSparkMax(DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANSparkMax(DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANCoder(DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER));
     private final SwerveModule frontRightModule = new BlitzSwerveModule(
         new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
         FRONT_RIGHT_ANGLE_OFFSET,
-        new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANCoder(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER));
+        new CANSparkMax(DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANSparkMax(DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANCoder(DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER));
     private final SwerveModule backLeftModule = new BlitzSwerveModule(
         new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
         BACK_LEFT_ANGLE_OFFSET,
-        new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANCoder(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER));
+        new CANSparkMax(DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANSparkMax(DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANCoder(DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER));
     private final SwerveModule backRightModule = new BlitzSwerveModule(
         new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
         BACK_RIGHT_ANGLE_OFFSET,
-        new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        new CANCoder(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER));
+        new CANSparkMax(DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANSparkMax(DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        new CANCoder(DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER));
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0),
-            new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
-            new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
-            new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)
+        new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0),
+        new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
+        new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
+        new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)
     );
 
     private final NavX gyroscope = new NavX(SPI.Port.kMXP);

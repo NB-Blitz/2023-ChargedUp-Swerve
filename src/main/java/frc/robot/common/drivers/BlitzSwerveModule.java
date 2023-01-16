@@ -1,5 +1,6 @@
 package frc.robot.common.drivers;
 
+import static frc.robot.Constants.*;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -14,9 +15,7 @@ public class BlitzSwerveModule extends SwerveModule {
      */
     public static final double DEFAULT_DRIVE_ROTATIONS_PER_UNIT = (1.0 / (4.0 * Math.PI)) * (60.0 / 15.0) * (18.0 / 26.0) * (42.0 / 14.0);
 
-    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(0.5, 0.0, 0.0001);
-
-    private static final double CAN_UPDATE_RATE = 50.0;
+    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(P, I, D);
 
     private final double angleOffset;
 

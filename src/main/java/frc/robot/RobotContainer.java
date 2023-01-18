@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+// import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,6 +26,7 @@ public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
     private final XboxController m_controller = new XboxController(0);
+    // private final Joystick m_joystick = new Joystick(0);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -41,6 +43,13 @@ public class RobotContainer {
             (DoubleSupplier)(() -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
             (DoubleSupplier)(() -> -modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
         ));
+
+        // m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+        //     m_drivetrainSubsystem,
+        //     (DoubleSupplier)(() -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+        //     (DoubleSupplier)(() -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND),
+        //     (DoubleSupplier)(() -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
+        // ));
 
         // Configure the button bindings
         configureButtonBindings();

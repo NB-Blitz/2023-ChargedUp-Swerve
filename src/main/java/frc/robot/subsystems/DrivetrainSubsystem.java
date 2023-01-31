@@ -17,9 +17,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ResetGyroCommand;
 
 import static frc.robot.Constants.*;
 
@@ -29,7 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
      */
-    public static final double MAX_VOLTAGE = 12.0;
+    public static final double MAX_VOLTAGE = 6.0;
 
     //  The formula for calculating the theoretical maximum velocity is:
     //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
@@ -77,6 +75,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DrivetrainSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+
+        tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
+
+        tab.addDoubleArray("Chassis Speeds", () -> new double[]{
+            m_chassisSpeeds.vxMetersPerSecond, m_chassisSpeeds.vyMetersPerSecond, m_chassisSpeeds.omegaRadiansPerSecond
+        });
 
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
@@ -134,8 +138,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
      * 'forwards' direction.
      */
-    public Command zeroGyroscope() {
-        return new ResetGyroCommand(m_navx);
+    public void zeroGyroscope() {
+        m_navx.zeroYaw();
     }
 
     public Rotation2d getGyroscopeRotation() {

@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
@@ -140,15 +142,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void zeroGyroscope() {
         m_navx.zeroYaw();
+        System.out.print("gyro Zeroed");
     }
 
     public Rotation2d getGyroscopeRotation() {
         if (m_navx.isMagnetometerCalibrated()) {
             // We will only get valid fused headings if the magnetometer is calibrated
-            return Rotation2d.fromDegrees(m_navx.getFusedHeading());
+            return Rotation2d.fromDegrees(360 - m_navx.getFusedHeading());
         }
         // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
-        return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
+        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -159,6 +162,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+
+        //optimize
+        //SwerveModuleState FLState = SwerveModuleState.optimize(states[0], Rotation2d.fromDegrees(m_frontLeftModule.getSteerAngle()));
+        //SwerveModuleState FRState = SwerveModuleState.optimize(states[1], Rotation2d.fromDegrees(m_frontRightModule.getSteerAngle()));
+        //SwerveModuleState BLState = SwerveModuleState.optimize(states[2], Rotation2d.fromDegrees(m_backLeftModule.getSteerAngle()));
+        //SwerveModuleState BRState = SwerveModuleState.optimize(states[3], Rotation2d.fromDegrees(m_backRightModule.getSteerAngle()));
 
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());

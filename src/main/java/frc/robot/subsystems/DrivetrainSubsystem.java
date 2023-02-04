@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*;
@@ -66,6 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
     // cause the angle reading to increase until it wraps back over to zero.
     private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+    private double gyroOffset = 0.0;
 
     // These are our modules. We initialize them in the constructor.
     private final SwerveModule m_frontLeftModule;
@@ -79,10 +78,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
         tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
-
-        tab.addDoubleArray("Chassis Speeds", () -> new double[]{
-            m_chassisSpeeds.vxMetersPerSecond, m_chassisSpeeds.vyMetersPerSecond, m_chassisSpeeds.omegaRadiansPerSecond
-        });
+        tab.addDouble("Gyro Offset", () -> gyroOffset);
 
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
@@ -142,16 +138,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void zeroGyroscope() {
         m_navx.zeroYaw();
-        System.out.print("gyro Zeroed");
+        //gyroOffset = getRawGyroscopeRotation();
+    }
+
+    public double getRawGyroscopeRotation() {
+        if (m_navx.isMagnetometerCalibrated()) {
+            // We will only get valid fused headings if the magnetometer is calibrated
+            return 360 - m_navx.getFusedHeading();
+        }
+        // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
+        return 360 - (m_navx.getYaw() + 180);
     }
 
     public Rotation2d getGyroscopeRotation() {
-        if (m_navx.isMagnetometerCalibrated()) {
-            // We will only get valid fused headings if the magnetometer is calibrated
-            return Rotation2d.fromDegrees(360 - m_navx.getFusedHeading());
-        }
-        // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
-        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
+        return Rotation2d.fromDegrees(getRawGyroscopeRotation() - gyroOffset);
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {

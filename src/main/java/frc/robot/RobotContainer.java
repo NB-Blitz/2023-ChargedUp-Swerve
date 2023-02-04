@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -34,15 +34,15 @@ public class RobotContainer {
         // Left stick X axis -> left and right movement
         // Right stick X axis -> rotation
 
+        // Configure the button bindings
+        configureButtonBindings();
+
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
             () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
-
-        // Configure the button bindings
-        configureButtonBindings();
     }
 
     /**
@@ -53,9 +53,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // Button 11 on the joystick zeros the gyroscope
-        new Trigger(() -> m_joystick.getRawButton(10))
-            // No requirements because we don't need to interrupt anything
-            .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroGyroscope));
+        new JoystickButton(m_joystick, 11)
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
     }
 
     /**

@@ -138,7 +138,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void zeroGyroscope() {
         m_navx.zeroYaw();
-        //gyroOffset = getRawGyroscopeRotation();
+        gyroOffset = getRawGyroscopeRotation();
     }
 
     public double getRawGyroscopeRotation() {

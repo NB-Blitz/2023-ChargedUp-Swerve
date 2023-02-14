@@ -55,6 +55,8 @@ public class RobotContainer {
         // Button 11 on the joystick zeros the gyroscope
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
+        new JoystickButton(m_joystick, 1)
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.dabloons()));
     }
 
     /**

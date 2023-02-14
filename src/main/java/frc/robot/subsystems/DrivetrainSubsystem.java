@@ -27,7 +27,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
      */
-    public static final double MAX_VOLTAGE = 6.0;
+    public static final double 
+     MAX_VOLTAGE = 12.0;
 
     //  The formula for calculating the theoretical maximum velocity is:
     //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
@@ -138,7 +139,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void zeroGyroscope() {
         m_navx.zeroYaw();
-        gyroOffset = getRawGyroscopeRotation();
+        //gyroOffset = getRawGyroscopeRotation();
+    }
+
+    /**
+     * grabber angle facing down = -90 degrees when main thing down DEFAULT
+     * grabber angle facing forward = 0 degrees when main thing down
+     * main angle facing down = 0 DEFAULT
+     * change grabber angle by main angle x-1
+     * push a button clamps on to cones
+     * push a different button clamps on to cubes
+     * d pad controls the telescope and the rotation of the manipulator
+     */
+
+    public void dabloons() {
+        System.out.println("You have ZERO dabloons");
     }
 
     public double getRawGyroscopeRotation() {

@@ -142,14 +142,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //gyroOffset = getRawGyroscopeRotation();
     }
 
-    /**
+    /*
      * grabber angle facing down = -90 degrees when main thing down DEFAULT
      * grabber angle facing forward = 0 degrees when main thing down
      * main angle facing down = 0 DEFAULT
-     * change grabber angle by main angle x-1
-     * push a button clamps on to cones
-     * push a different button clamps on to cubes
-     * d pad controls the telescope and the rotation of the manipulator
+     * change grabber angle by main angle x-1 
+     * y = close claw
+     * a = open claw
+     * lt = shoulder down(dynamic position)
+     * rt = shoulder up(dynamic position)
+     * lb = telescope in(dynamic position)
+     * rb = telescope out(dynamic position)
      */
 
     public void dabloons() {

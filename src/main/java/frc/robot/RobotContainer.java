@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,6 +25,7 @@ public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
     private final Joystick m_joystick = new Joystick(0);
+    private final CommandXboxController m_operator = new CommandXboxController(1);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -41,7 +44,8 @@ public class RobotContainer {
             m_drivetrainSubsystem,
             () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+            () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+            () -> -getTrigger(m_operator.getLeftTriggerAxis(), m_operator.getRightTriggerAxis())
         ));
     }
 
@@ -93,4 +97,21 @@ public class RobotContainer {
 
         return value;
     }
+    
+    //translates two triggers (0-1) to a (-1 - 1) range
+    private static double getTrigger(double left, double right)
+    {
+        double total = 0;
+        if(right > 0)
+        {
+            total = right;
+        }
+        if(left > 0)
+        {
+            total = -left;
+        }
+
+        return total;
+    }
+
 }

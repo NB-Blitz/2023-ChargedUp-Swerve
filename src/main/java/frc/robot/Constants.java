@@ -55,5 +55,8 @@ public final class Constants {
         public static final double ANGLE_DELTA = 2;
         public static final double MIN_ROTATION_ENCODER_VALUE = 0; // change to what it actually is
         public static final double MAX_ROTATION_ENCODER_VALUE = 3; // change to what it actually is
+        
+        public static final double CLAW_GRIP_MOTOR_CAN = //s8; //fixme
+
       }
 }

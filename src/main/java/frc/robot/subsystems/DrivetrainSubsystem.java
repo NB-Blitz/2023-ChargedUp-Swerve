@@ -172,7 +172,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(getRawGyroscopeRotation() - gyroOffset);
     }
 
-    public void drive(ChassisSpeeds chassisSpeeds) {
+    public void drive(ChassisSpeeds chassisSpeeds, Double clampValue) {
         m_chassisSpeeds = chassisSpeeds;
     }
 

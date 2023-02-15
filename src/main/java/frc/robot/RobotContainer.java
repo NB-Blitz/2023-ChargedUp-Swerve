@@ -58,7 +58,8 @@ public class RobotContainer {
         new JoystickButton(m_joystick, 1)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.dabloons()));
 
-        
+            //armController.joystick.button(ControllerConstants.CLAW_GRIP_BUTTON_NUMBER).whileTrue(clawGrip.closeClaw());
+            //armController.joystick.button(ControllerConstants.CLAW_GRIP_BUTTON_NUMBER).onFalse(clawGrip.openClaw());
     }
 
     /**

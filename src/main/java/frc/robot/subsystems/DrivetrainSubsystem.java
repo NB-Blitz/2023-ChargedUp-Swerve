@@ -77,7 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-        tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
+        tab.addDouble("Raw Gyro", () -> getRawGyroscopeRotation());
         tab.addDouble("Gyro Offset", () -> gyroOffset);
 
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(

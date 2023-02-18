@@ -33,6 +33,6 @@ public class ManipulatorStateCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        m_manipulatorStateSubsystem.setHome();
     }
 }

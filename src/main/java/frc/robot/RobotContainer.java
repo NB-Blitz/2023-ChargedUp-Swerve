@@ -7,12 +7,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.GripCommand;
+import frc.robot.commands.ManipulatorStateCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GripSubsystem;
+import frc.robot.subsystems.ManipulatorStateSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,9 +26,11 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+    private final ManipulatorStateSubsystem m_manipulatorStateSubsystem = new ManipulatorStateSubsystem();
+    private final GripSubsystem m_gripSubsystem = new GripSubsystem();
 
     private final Joystick m_joystick = new Joystick(0);
-    private final CommandXboxController m_operator = new CommandXboxController(1);
+    private final XboxController m_controller = new XboxController(1);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -44,8 +49,14 @@ public class RobotContainer {
             m_drivetrainSubsystem,
             () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-            () -> -getTrigger(m_operator.getLeftTriggerAxis(), m_operator.getRightTriggerAxis())
+            () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
+        );
+
+        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(m_manipulatorStateSubsystem));
+
+        m_gripSubsystem.setDefaultCommand(new GripCommand(
+            m_gripSubsystem,
+            () -> translateTriggers(m_controller.getLeftTriggerAxis(), m_controller.getRightTriggerAxis())
         ));
     }
 
@@ -59,11 +70,10 @@ public class RobotContainer {
         // Button 11 on the joystick zeros the gyroscope
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
-        new JoystickButton(m_joystick, 1)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.dabloons()));
-
-            //armController.joystick.button(ControllerConstants.CLAW_GRIP_BUTTON_NUMBER).whileTrue(clawGrip.closeClaw());
-            //armController.joystick.button(ControllerConstants.CLAW_GRIP_BUTTON_NUMBER).onFalse(clawGrip.openClaw());
+        
+        // D-pad down sets manipulator to home position
+        new JoystickButton(m_controller, 1) // TODO: Get button number of D-pad down
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
     }
 
     /**
@@ -98,20 +108,8 @@ public class RobotContainer {
         return value;
     }
     
-    //translates two triggers (0-1) to a (-1 - 1) range
-    private static double getTrigger(double left, double right)
-    {
-        double total = 0;
-        if(right > 0)
-        {
-            total = right;
-        }
-        if(left > 0)
-        {
-            total = -left;
-        }
-
-        return total;
+    // Translates two triggers (0,1) to a single (-1,1) range
+    private static double translateTriggers(double left, double right) {
+        return -left + right;
     }
-
 }

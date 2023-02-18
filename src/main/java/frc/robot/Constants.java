@@ -26,8 +26,8 @@ public final class Constants {
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.45;
 
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 2;//4;
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 1;//3;
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 2;
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 9;
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(150.7);
 
@@ -46,17 +46,16 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(112.2);
 
+    public static final int SHOULDER_MOTOR_ID = 13;
+    public static final int TELESCOPE_MOTOR_ID = 14;
+    public static final int WRIST_MOTOR_ID = 15;
+    public static final int GRIP_MOTOR_ID = 16;
 
-    public static class ClawConstants {
-        public static final double CLAW_GRIP_SPEED = 0.4; // change to what this actually is
-        public static final double MAX_GRIP_ENCODER_VALUE = 3; // change to what this actually is
-        public static final double MIN_GRIP_ENCODER_VALUE = 0.3; //change to what this actually is
-        public static final double CLAW_ROTATE_SPEED = 0.1;
-        public static final double ANGLE_DELTA = 2;
-        public static final double MIN_ROTATION_ENCODER_VALUE = 0; // change to what it actually is
-        public static final double MAX_ROTATION_ENCODER_VALUE = 3; // change to what it actually is
-        
-        public static final double CLAW_GRIP_MOTOR_CAN = //s8; //fixme
-
-      }
+    public static final double GRIP_SPEED_MULTIPLIER = 0.4; // change to what this actually is
+    public static final double MAX_GRIP_ENCODER_VALUE = 3; // change to what this actually is
+    public static final double MIN_GRIP_ENCODER_VALUE = 0.3; //change to what this actually is
+    public static final double CLAW_ROTATE_SPEED = 0.1;
+    public static final double ANGLE_DELTA = 2;
+    public static final double MIN_ROTATION_ENCODER_VALUE = 0; // change to what it actually is
+    public static final double MAX_ROTATION_ENCODER_VALUE = 3; // change to what it actually is
 }

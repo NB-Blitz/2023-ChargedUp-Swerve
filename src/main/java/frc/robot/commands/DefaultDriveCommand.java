@@ -12,18 +12,15 @@ public class DefaultDriveCommand extends CommandBase {
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
-    private final DoubleSupplier m_clampSupplier;
 
     public DefaultDriveCommand(DrivetrainSubsystem drivetrainSubsystem,
                                DoubleSupplier translationXSupplier,
                                DoubleSupplier translationYSupplier,
-                               DoubleSupplier rotationSupplier,
-                               DoubleSupplier clampSupplier) {
+                               DoubleSupplier rotationSupplier) {
         this.m_drivetrainSubsystem = drivetrainSubsystem;
         this.m_translationXSupplier = translationXSupplier;
         this.m_translationYSupplier = translationYSupplier;
         this.m_rotationSupplier = rotationSupplier;
-        this.m_clampSupplier = clampSupplier;
 
         addRequirements(drivetrainSubsystem);
     }
@@ -42,13 +39,12 @@ public class DefaultDriveCommand extends CommandBase {
                m_translationYSupplier.getAsDouble(),
                m_rotationSupplier.getAsDouble(),
                m_drivetrainSubsystem.getGyroscopeRotation()
-            ),
-            m_clampSupplier.getAsDouble()
+            )
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_drivetrainSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0), 0.0);
+        m_drivetrainSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
     }
 }

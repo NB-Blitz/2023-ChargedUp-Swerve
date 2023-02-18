@@ -51,11 +51,19 @@ public final class Constants {
     public static final int WRIST_MOTOR_ID = 15;
     public static final int GRIP_MOTOR_ID = 16;
 
-    public static final double GRIP_SPEED_MULTIPLIER = 0.4; // change to what this actually is
-    public static final double MAX_GRIP_ENCODER_VALUE = 3; // change to what this actually is
-    public static final double MIN_GRIP_ENCODER_VALUE = 0.3; //change to what this actually is
-    public static final double CLAW_ROTATE_SPEED = 0.1;
-    public static final double ANGLE_DELTA = 2;
-    public static final double MIN_ROTATION_ENCODER_VALUE = 0; // change to what it actually is
-    public static final double MAX_ROTATION_ENCODER_VALUE = 3; // change to what it actually is
+    public static final double SHOULDER_SPEED_MULTIPLIER = 0.5; // TODO
+    public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
+    public static final double MIN_SHOULDER_ENCODER_VALUE = 0; // TODO
+
+    public static final double TELESCOPE_SPEED_MULTIPLIER = 0.5; // TODO
+    public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
+    public static final double MIN_TELESCOPE_ENCODER_VALUE = 0; // TODO
+
+    public static final double WRIST_SPEED_MULTIPLIER = 0.5; // TODO
+    public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
+    public static final double MIN_WRIST_ENCODER_VALUE = 0; // TODO
+
+    public static final double GRIP_SPEED_MULTIPLIER = 0.5; // TODO
+    public static final double MAX_GRIP_ENCODER_VALUE = 3; // TODO
+    public static final double MIN_GRIP_ENCODER_VALUE = 0; // TODO
 }

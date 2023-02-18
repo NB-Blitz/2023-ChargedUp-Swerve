@@ -70,10 +70,26 @@ public class RobotContainer {
         // Button 11 on the joystick zeros the gyroscope
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
-        
-        // D-pad down sets manipulator to home position
-        new JoystickButton(m_controller, 1) // TODO: Get button number of D-pad down
+
+        // ? sets manipulator to home position
+        new JoystickButton(m_controller, 1) // TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
+
+        // ? sets manipulator to floor position
+        new JoystickButton(m_controller, 2) // TODO: Set desired button number on controller
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
+
+        // ? sets manipulator to lower scoring position
+        new JoystickButton(m_controller, 3) // TODO: Set desired button number on controller
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setTwo()));
+
+        // ? sets manipulator to higher scoring position
+        new JoystickButton(m_controller, 4) // TODO: Set desired button number on controller
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
+
+        // ? sets manipulator to player station position
+        new JoystickButton(m_controller, 5) // TODO: Set desired button number on controller
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
     }
 
     /**

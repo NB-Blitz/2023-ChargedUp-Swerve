@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -11,16 +10,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class GripSubsystem extends SubsystemBase {
-    private final CANSparkMax gripMotor;
-    private final RelativeEncoder gripEncoder;
+    private final TalonSRX gripMotor;
 
     private double gripSpeed;
 
     public GripSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Manipulator");
 
-        this.gripMotor = new CANSparkMax(GRIP_MOTOR_ID, MotorType.kBrushless);
-        this.gripEncoder = this.gripMotor.getEncoder();
+        this.gripMotor = new TalonSRX(GRIP_MOTOR_ID);
 
         tab.addDouble("Grip Position", () -> getGripPos());
     }
@@ -32,15 +29,15 @@ public class GripSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (gripSpeed > 0 && getGripPos() < MAX_GRIP_ENCODER_VALUE) {
-            gripMotor.set(gripSpeed * GRIP_SPEED_MULTIPLIER);
+            gripMotor.set(TalonSRXControlMode.PercentOutput, gripSpeed * GRIP_SPEED_MULTIPLIER);
         } else if (gripSpeed < 0 && getGripPos() > MIN_GRIP_ENCODER_VALUE) {
-            gripMotor.set(gripSpeed * GRIP_SPEED_MULTIPLIER);
+            gripMotor.set(TalonSRXControlMode.PercentOutput, gripSpeed * GRIP_SPEED_MULTIPLIER);
         } else {
-            gripMotor.set(0);
+            gripMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }
     }
 
     private double getGripPos() {
-        return this.gripEncoder.getPosition();
+        return this.gripMotor.getSelectedSensorPosition();
     }
 }

@@ -36,24 +36,32 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         tab.addDouble("Wrist Position", () -> getWristPos());
     }
 
-    public void setHome() {
+    public void setHome() { //starting position
 
     }
 
-    public void setFloor() {
+    public void setFloor() { // floor level
 
     }
 
-    public void setTwo() {
+    public void setTwo() { // 2nd level
 
     }
 
-    public void setThree() {
+    public void setThree() { // third level
 
     }
 
-    public void setPlayerArea() {
+    public void setPlayerArea() { // the human player place
 
+    }
+
+    private void setTelescopePos(double change) {
+        //telescope motor target angle = change
+    }
+
+    private void changeTelescopePos(double change) {
+        //telescope motor target angle = change + getTelescopePos()
     }
 
     @Override

@@ -40,23 +40,49 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     public void setHome() { //starting position
         targetShoulderAngle = CONST_SHOULDER_HOME;
-
+        targetTelescopeLength = CONST_TELESCOPE_HOME;
+        targetWristAngle = CONST_WRIST_HOME;
     }
 
     public void setFloor() { // floor level
-
+        targetShoulderAngle = CONST_SHOULDER_FLOOR;
+        targetTelescopeLength = CONST_TELESCOPE_FLOOR;
+        targetWristAngle = CONST_WRIST_FLOOR;
     }
 
     public void setTwo() { // 2nd level
 
+        if (coneMode == false) {
+        targetShoulderAngle = CONST_SHOULDER_LVL2_CUBE;
+        targetTelescopeLength = CONST_TELESCOPE_LVL2_CUBE;
+        targetWristAngle = CONST_WRIST_LVL2_CUBE;
+        }
+        if (coneMode == true) {
+        targetShoulderAngle = CONST_SHOULDER_LVL2_CONE;
+        targetTelescopeLength = CONST_TELESCOPE_LVL2_CONE;
+        targetWristAngle = CONST_WRIST_LVL2_CONE;
+        }
     }
 
     public void setThree() { // third level
 
+        if (coneMode == true) {
+        targetShoulderAngle = CONST_SHOULDER_LVL3_CONE;
+        targetTelescopeLength = CONST_TELESCOPE_LVL3_CONE;
+        targetWristAngle = CONST_WRIST_LVL3_CONE;
+        }
+
+        if (coneMode == false) {
+        targetShoulderAngle = CONST_SHOULDER_LVL3_CUBE;
+        targetTelescopeLength = CONST_TELESCOPE_LVL3_CUBE;
+        targetWristAngle = CONST_WRIST_LVL3_CUBE;
+        }
     }
 
     public void setPlayerArea() { // the human player place
-
+        targetShoulderAngle = CONST_SHOULDER_PLAYER;
+        targetTelescopeLength = CONST_TELESCOPE_PLAYER;
+        targetWristAngle = CONST_WRIST_LVL3_PLAYER;
     }
 
     public void setModeCone(){
@@ -76,7 +102,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setTelescopePos();
+        //setTelescopePos();
     }
 
     private double getShoulderPos() {

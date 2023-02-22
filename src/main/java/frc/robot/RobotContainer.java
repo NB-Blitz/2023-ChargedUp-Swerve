@@ -90,6 +90,14 @@ public class RobotContainer {
         // ? sets manipulator to player station position
         new JoystickButton(m_controller, 5) // TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
+        
+        // sets manipulator to cone mode
+        new JoystickButton(m_controller, 5) // this is the left bumper
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone())); 
+
+        // sets manipulator to cone mode
+        new JoystickButton(m_controller, 6) // this is the right bumper
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube())); 
     }
 
     /**

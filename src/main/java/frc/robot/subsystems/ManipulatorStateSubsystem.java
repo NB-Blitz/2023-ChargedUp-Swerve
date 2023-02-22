@@ -21,6 +21,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     private double targetShoulderAngle;
     private double targetTelescopeLength;
     private double targetWristAngle;
+    private boolean coneMode;
 
     public ManipulatorStateSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Manipulator");
@@ -30,6 +31,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         this.wristMotor = new TalonSRX(WRIST_MOTOR_ID);
         this.shoulderEncoder = this.shoulderMotor.getEncoder();
         this.telescopeEncoder = this.telescopeMotor.getEncoder();
+        this.coneMode = true;
 
         tab.addDouble("Shoulder Position", () -> getShoulderPos());
         tab.addDouble("Telescope Position", () -> getTelescopePos());
@@ -37,6 +39,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
 
     public void setHome() { //starting position
+        targetShoulderAngle = CONST_SHOULDER_HOME;
 
     }
 
@@ -56,6 +59,13 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     }
 
+    public void setModeCone(){
+        coneMode = true;
+    }
+    public void setModeCube(){
+        coneMode = false;
+    }
+
     private void setTelescopePos(double change) {
         //telescope motor target angle = change
     }
@@ -66,7 +76,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        setTelescopePos();
     }
 
     private double getShoulderPos() {

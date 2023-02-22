@@ -77,7 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-        tab.addDouble("Raw Gyro", () -> getRawGyroscopeRotation());
+        tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
         tab.addDouble("Gyro Offset", () -> gyroOffset);
 
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
@@ -140,7 +140,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_navx.zeroYaw();
         gyroOffset = getRawGyroscopeRotation();
     }
-
+    public void turnGyroscope() {
+        m_navx.zeroYaw();
+        gyroOffset = 35 + getRawGyroscopeRotation();
+    }
+    public double getoffset() {
+        
+        return gyroOffset;
+    }
     public double getRawGyroscopeRotation() {
         if (m_navx.isMagnetometerCalibrated()) {
             // We will only get valid fused headings if the magnetometer is calibrated

@@ -30,7 +30,7 @@ public class RobotContainer {
     private final GripSubsystem m_gripSubsystem = new GripSubsystem();
     private final Joystick m_joystick = new Joystick(0);
     private final XboxController m_controller = new XboxController(1);
-
+    
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -43,7 +43,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
-
+        
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
             () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
@@ -51,7 +51,7 @@ public class RobotContainer {
             () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
         
-        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(m_manipulatorStateSubsystem));
+        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(m_manipulatorStateSubsystem, () -> m_controller.getLeftY()));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
             m_gripSubsystem,
@@ -70,24 +70,27 @@ public class RobotContainer {
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
 
+        new JoystickButton(m_joystick, 1)
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(.4)))
+            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(1.0)));
         // ? sets manipulator to home position
-        new JoystickButton(m_controller, 1) // A TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 10) // A
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
 
         // ? sets manipulator to floor position
-        new JoystickButton(m_controller, 2) // B TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 2) // X 
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
 
         // ? sets manipulator to lower scoring position
-        new JoystickButton(m_controller, 3) // X TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 4) // Y 
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setTwo()));
 
         // ? sets manipulator to higher scoring position
-        new JoystickButton(m_controller, 4) // Y TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 2) // B
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
 
         // ? sets manipulator to player station position
-        new JoystickButton(m_controller, 7) // Two Squares TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 10) // right thumb button
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
         
         // sets manipulator to cone mode
@@ -97,6 +100,7 @@ public class RobotContainer {
         // sets manipulator to cube mode
         new JoystickButton(m_controller, 6) // this is the right bumper
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube())); 
+
     }
 
     /**

@@ -22,6 +22,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     private double targetTelescopeLength;
     private double targetWristAngle;
     private boolean coneMode;
+    private double trim;
 
     public ManipulatorStateSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Manipulator");
@@ -32,10 +33,12 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         this.shoulderEncoder = this.shoulderMotor.getEncoder();
         this.telescopeEncoder = this.telescopeMotor.getEncoder();
         this.coneMode = true;
+        this.trim = 0;
 
         tab.addDouble("Shoulder Position", () -> getShoulderPos());
         tab.addDouble("Telescope Position", () -> getTelescopePos());
         tab.addDouble("Wrist Position", () -> getWristPos());
+        tab.addDouble("Trim", () -> getTrim());
     }
 
     public void setHome() { //starting position
@@ -85,6 +88,13 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         targetWristAngle = CONST_WRIST_PLAYER;
     }
 
+    public void trimUp(){
+        trim += TRIM_STEP;
+    }
+    public void trimDown(){
+        trim -= TRIM_STEP;
+    }
+
     public void setModeCone(){
         coneMode = true;
     }
@@ -92,11 +102,20 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         coneMode = false;
     }
 
-    @Override
-    public void periodic() {
+    
+    public void periodic(double trimJoystick) {
         //setTelescopePos();
+        if(trimJoystick > 0.5)
+        {
+            trimUp();
+        }
+        else if(trimJoystick < -0.5)
+        {
+            trimDown();
+        }
     }
 
+    
     private double getShoulderPos() {
         return shoulderEncoder.getPosition();
     }
@@ -107,5 +126,9 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     private double getWristPos() {
         return wristMotor.getSelectedSensorPosition();
+    }
+
+    private double getTrim() {
+        return trim;
     }
 }

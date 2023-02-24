@@ -94,5 +94,7 @@ public final class Constants {
     public static final double CONST_SHOULDER_PLAYER = 0; //TODO
     public static final double CONST_TELESCOPE_PLAYER = 0; //TODO
     public static final double CONST_WRIST_PLAYER = 0; //TODO
+
+    public static final double TRIM_STEP = .5;
 }
 

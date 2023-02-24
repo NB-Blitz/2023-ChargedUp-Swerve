@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ManipulatorStateSubsystem;
+import java.util.function.DoubleSupplier;
 
 /*
  * wrist angle facing down = -90 degrees when shoulder down DEFAULT
@@ -19,16 +20,17 @@ import frc.robot.subsystems.ManipulatorStateSubsystem;
 
 public class ManipulatorStateCommand extends CommandBase {
     private final ManipulatorStateSubsystem m_manipulatorStateSubsystem;
+    private final DoubleSupplier m_trim_Supplier;
 
-    public ManipulatorStateCommand(ManipulatorStateSubsystem manipulatorStateSubsystem) {
+    public ManipulatorStateCommand(ManipulatorStateSubsystem manipulatorStateSubsystem, DoubleSupplier trimSupplier) {
         this.m_manipulatorStateSubsystem = manipulatorStateSubsystem;
-
+        this.m_trim_Supplier = trimSupplier;
         addRequirements(manipulatorStateSubsystem);
     }
 
     @Override
     public void execute() {
-        
+        m_manipulatorStateSubsystem.periodic(m_trim_Supplier.getAsDouble());
     }
 
     @Override

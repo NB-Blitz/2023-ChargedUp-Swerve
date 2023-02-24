@@ -82,7 +82,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     public void setPlayerArea() { // the human player place
         targetShoulderAngle = CONST_SHOULDER_PLAYER;
         targetTelescopeLength = CONST_TELESCOPE_PLAYER;
-        targetWristAngle = CONST_WRIST_LVL3_PLAYER;
+        targetWristAngle = CONST_WRIST_PLAYER;
     }
 
     public void setModeCone(){
@@ -90,14 +90,6 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
     public void setModeCube(){
         coneMode = false;
-    }
-
-    private void setTelescopePos(double change) {
-        //telescope motor target angle = change
-    }
-
-    private void changeTelescopePos(double change) {
-        //telescope motor target angle = change + getTelescopePos()
     }
 
     @Override

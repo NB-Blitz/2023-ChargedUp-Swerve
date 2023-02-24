@@ -71,30 +71,30 @@ public class RobotContainer {
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
 
         // ? sets manipulator to home position
-        new JoystickButton(m_controller, 1) // TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 1) // A TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
 
         // ? sets manipulator to floor position
-        new JoystickButton(m_controller, 2) // TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 2) // B TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
 
         // ? sets manipulator to lower scoring position
-        new JoystickButton(m_controller, 3) // TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 3) // X TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setTwo()));
 
         // ? sets manipulator to higher scoring position
-        new JoystickButton(m_controller, 4) // TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 4) // Y TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
 
         // ? sets manipulator to player station position
-        new JoystickButton(m_controller, 5) // TODO: Set desired button number on controller
+        new JoystickButton(m_controller, 7) // Two Squares TODO: Set desired button number on controller
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
         
         // sets manipulator to cone mode
         new JoystickButton(m_controller, 5) // this is the left bumper
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone())); 
 
-        // sets manipulator to cone mode
+        // sets manipulator to cube mode
         new JoystickButton(m_controller, 6) // this is the right bumper
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube())); 
     }

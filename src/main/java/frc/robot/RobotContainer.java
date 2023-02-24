@@ -70,6 +70,9 @@ public class RobotContainer {
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
 
+        new JoystickButton(m_joystick, 1)
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(.4)))
+            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(1.0)));
         // ? sets manipulator to home position
         new JoystickButton(m_controller, 10) // A
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));

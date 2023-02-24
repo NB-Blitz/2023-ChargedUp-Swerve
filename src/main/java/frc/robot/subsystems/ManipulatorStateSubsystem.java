@@ -1,5 +1,34 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.CONST_SHOULDER_FLOOR;
+import static frc.robot.Constants.CONST_SHOULDER_HOME;
+import static frc.robot.Constants.CONST_SHOULDER_LVL2_CONE;
+import static frc.robot.Constants.CONST_SHOULDER_LVL2_CUBE;
+import static frc.robot.Constants.CONST_SHOULDER_LVL3_CONE;
+import static frc.robot.Constants.CONST_SHOULDER_LVL3_CUBE;
+import static frc.robot.Constants.CONST_SHOULDER_PLAYER;
+import static frc.robot.Constants.CONST_TELESCOPE_FLOOR;
+import static frc.robot.Constants.CONST_TELESCOPE_HOME;
+import static frc.robot.Constants.CONST_TELESCOPE_LVL2_CONE;
+import static frc.robot.Constants.CONST_TELESCOPE_LVL2_CUBE;
+import static frc.robot.Constants.CONST_TELESCOPE_LVL3_CONE;
+import static frc.robot.Constants.CONST_TELESCOPE_LVL3_CUBE;
+import static frc.robot.Constants.CONST_TELESCOPE_PLAYER;
+import static frc.robot.Constants.CONST_WRIST_FLOOR;
+import static frc.robot.Constants.CONST_WRIST_HOME;
+import static frc.robot.Constants.CONST_WRIST_LVL2_CONE;
+import static frc.robot.Constants.CONST_WRIST_LVL2_CUBE;
+import static frc.robot.Constants.CONST_WRIST_LVL3_CONE;
+import static frc.robot.Constants.CONST_WRIST_LVL3_CUBE;
+import static frc.robot.Constants.CONST_WRIST_PLAYER;
+import static frc.robot.Constants.SHOULDER_MOTOR_ID;
+import static frc.robot.Constants.TELESCOPE_MOTOR_ID;
+import static frc.robot.Constants.WRIST_MOTOR_ID;
+import static frc.robot.Constants.WRIST_SPEED_MULTIPLIER;
+import static frc.robot.Constants.SHOULDER_SPEED_MULTIPLIER;
+import static frc.robot.Constants.TELESCOPE_SPEED_MULTIPLIER;
+
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -113,9 +142,35 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         {
             trimDown();
         }
+        if (targetShoulderAngle < getShoulderPos()){
+            shoulderMotor.set(-SHOULDER_SPEED_MULTIPLIER);
+        }
+        else if (targetShoulderAngle > getShoulderPos()){
+            shoulderMotor.set(SHOULDER_SPEED_MULTIPLIER);
+        }
+        else{
+            shoulderMotor.set(0);
+        }
+        if (targetTelescopeLength < getTelescopePos()){
+            telescopeMotor.set(-TELESCOPE_SPEED_MULTIPLIER);
+        }
+        else if (targetTelescopeLength > getTelescopePos()){
+            telescopeMotor.set(TELESCOPE_SPEED_MULTIPLIER);
+        }
+        else{
+            telescopeMotor.set(0);
+        }
+        if (targetWristAngle < getWristPos()){
+            wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
+        }
+        else if (targetWristAngle > getWristPos()){
+            wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
+        }
+        else{
+            wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
+        }
     }
 
-    
     private double getShoulderPos() {
         return shoulderEncoder.getPosition();
     }

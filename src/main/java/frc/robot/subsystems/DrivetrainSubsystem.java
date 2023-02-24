@@ -140,7 +140,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_navx.zeroYaw();
         gyroOffset = getRawGyroscopeRotation();
     }
-
+    public void turnGyroscope() {
+        m_navx.zeroYaw();
+        gyroOffset = 35 + getRawGyroscopeRotation();
+    }
+    public double getoffset() {
+        
+        return gyroOffset;
+    }
     public double getRawGyroscopeRotation() {
         if (m_navx.isMagnetometerCalibrated()) {
             // We will only get valid fused headings if the magnetometer is calibrated

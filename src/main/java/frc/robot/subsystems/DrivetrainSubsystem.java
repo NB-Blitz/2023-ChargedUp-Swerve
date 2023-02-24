@@ -27,6 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
      */
+manipulator
     public static final double MAX_VOLTAGE = 12.0;
 
     //  The formula for calculating the theoretical maximum velocity is:
@@ -86,7 +87,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-                .withSize(2, 4)
+                .withSize(2, 3)
                 .withPosition(0, 0),
             // This can be L1, L2, L3, or L4 depending on your gear configuration
             Mk4SwerveModuleHelper.GearRatio.L2,
@@ -103,7 +104,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // We will do the same for the other modules
         m_frontRightModule = Mk4SwerveModuleHelper.createNeo(
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
-                .withSize(2, 4)
+                .withSize(2, 3)
                 .withPosition(2, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
@@ -114,7 +115,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_backLeftModule = Mk4SwerveModuleHelper.createNeo(
             tab.getLayout("Back Left Module", BuiltInLayouts.kList)
-                .withSize(2, 4)
+                .withSize(2, 3)
                 .withPosition(4, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
@@ -125,7 +126,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_backRightModule = Mk4SwerveModuleHelper.createNeo(
             tab.getLayout("Back Right Module", BuiltInLayouts.kList)
-                .withSize(2, 4)
+                .withSize(2, 3)
                 .withPosition(6, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,

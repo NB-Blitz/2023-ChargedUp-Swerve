@@ -27,7 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
      */
-    public static final double MAX_VOLTAGE = 6.0;
+    public static final double MAX_VOLTAGE = 12.0;
 
     //  The formula for calculating the theoretical maximum velocity is:
     //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
@@ -65,6 +65,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // cause the angle reading to increase until it wraps back over to zero.
     private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
     private double gyroOffset = 0.0;
+    private double drivePercent = 1.0;
 
     // These are our modules. We initialize them in the constructor.
     private final SwerveModule m_frontLeftModule;
@@ -79,6 +80,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
         tab.addDouble("Gyro Offset", () -> gyroOffset);
+
+        tab.addDouble("Drive %",  () -> drivePercent);
 
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
@@ -165,6 +168,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_chassisSpeeds = chassisSpeeds;
     }
 
+    public void setDrivePercent(double perc){
+        drivePercent = perc;
+    }
+
     @Override
     public void periodic() {
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
@@ -176,9 +183,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //SwerveModuleState BLState = SwerveModuleState.optimize(states[2], Rotation2d.fromDegrees(m_backLeftModule.getSteerAngle()));
         //SwerveModuleState BRState = SwerveModuleState.optimize(states[3], Rotation2d.fromDegrees(m_backRightModule.getSteerAngle()));
 
-        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[0].angle.getRadians());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[1].angle.getRadians());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[2].angle.getRadians());
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[3].angle.getRadians());
     }
 }

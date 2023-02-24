@@ -27,7 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
      */
-manipulator
+
     public static final double MAX_VOLTAGE = 12.0;
 
     //  The formula for calculating the theoretical maximum velocity is:
@@ -144,14 +144,7 @@ manipulator
         m_navx.zeroYaw();
         gyroOffset = getRawGyroscopeRotation();
     }
-    public void turnGyroscope() {
-        m_navx.zeroYaw();
-        gyroOffset = 35 + getRawGyroscopeRotation();
-    }
-    public double getoffset() {
-        
-        return gyroOffset;
-    }
+
     public double getRawGyroscopeRotation() {
         if (m_navx.isMagnetometerCalibrated()) {
             // We will only get valid fused headings if the magnetometer is calibrated
@@ -184,9 +177,9 @@ manipulator
         //SwerveModuleState BLState = SwerveModuleState.optimize(states[2], Rotation2d.fromDegrees(m_backLeftModule.getSteerAngle()));
         //SwerveModuleState BRState = SwerveModuleState.optimize(states[3], Rotation2d.fromDegrees(m_backRightModule.getSteerAngle()));
 
-        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[0].angle.getRadians());
-        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[1].angle.getRadians());
-        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[2].angle.getRadians());
-        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE * drivePercent, states[3].angle.getRadians());
+        m_frontLeftModule.set((states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE) * drivePercent, states[0].angle.getRadians());
+        m_frontRightModule.set((states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE) * drivePercent, states[1].angle.getRadians());
+        m_backLeftModule.set((states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE) * drivePercent, states[2].angle.getRadians());
+        m_backRightModule.set((states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE) * drivePercent, states[3].angle.getRadians());
     }
 }

@@ -1,33 +1,5 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CONST_SHOULDER_FLOOR;
-import static frc.robot.Constants.CONST_SHOULDER_HOME;
-import static frc.robot.Constants.CONST_SHOULDER_LVL2_CONE;
-import static frc.robot.Constants.CONST_SHOULDER_LVL2_CUBE;
-import static frc.robot.Constants.CONST_SHOULDER_LVL3_CONE;
-import static frc.robot.Constants.CONST_SHOULDER_LVL3_CUBE;
-import static frc.robot.Constants.CONST_SHOULDER_PLAYER;
-import static frc.robot.Constants.CONST_TELESCOPE_FLOOR;
-import static frc.robot.Constants.CONST_TELESCOPE_HOME;
-import static frc.robot.Constants.CONST_TELESCOPE_LVL2_CONE;
-import static frc.robot.Constants.CONST_TELESCOPE_LVL2_CUBE;
-import static frc.robot.Constants.CONST_TELESCOPE_LVL3_CONE;
-import static frc.robot.Constants.CONST_TELESCOPE_LVL3_CUBE;
-import static frc.robot.Constants.CONST_TELESCOPE_PLAYER;
-import static frc.robot.Constants.CONST_WRIST_FLOOR;
-import static frc.robot.Constants.CONST_WRIST_HOME;
-import static frc.robot.Constants.CONST_WRIST_LVL2_CONE;
-import static frc.robot.Constants.CONST_WRIST_LVL2_CUBE;
-import static frc.robot.Constants.CONST_WRIST_LVL3_CONE;
-import static frc.robot.Constants.CONST_WRIST_LVL3_CUBE;
-import static frc.robot.Constants.CONST_WRIST_PLAYER;
-import static frc.robot.Constants.SHOULDER_MOTOR_ID;
-import static frc.robot.Constants.TELESCOPE_MOTOR_ID;
-import static frc.robot.Constants.WRIST_MOTOR_ID;
-import static frc.robot.Constants.WRIST_SPEED_MULTIPLIER;
-import static frc.robot.Constants.SHOULDER_SPEED_MULTIPLIER;
-import static frc.robot.Constants.TELESCOPE_SPEED_MULTIPLIER;
-
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -50,6 +22,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     private double targetShoulderAngle;
     private double targetTelescopeLength;
     private double targetWristAngle;
+    private String currentLevel;
     private boolean coneMode;
     private double trim;
 
@@ -61,6 +34,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         this.wristMotor = new TalonSRX(WRIST_MOTOR_ID);
         this.shoulderEncoder = this.shoulderMotor.getEncoder();
         this.telescopeEncoder = this.telescopeMotor.getEncoder();
+        this.currentLevel = "home";
         this.coneMode = true;
         this.trim = 0;
 
@@ -70,51 +44,59 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         tab.addDouble("Trim", () -> getTrim());
     }
 
-    public void setHome() { //starting position
-        targetShoulderAngle = CONST_SHOULDER_HOME;
-        targetTelescopeLength = CONST_TELESCOPE_HOME;
-        targetWristAngle = CONST_WRIST_HOME;
+    public void moveTrim(double trimJoystick) {
+        if (trimJoystick < -0.5) {
+            trimUp();
+        } else if (trimJoystick > 0.5) {
+            trimDown();
+        }
     }
 
-    public void setFloor() { // floor level
-        targetShoulderAngle = CONST_SHOULDER_FLOOR;
-        targetTelescopeLength = CONST_TELESCOPE_FLOOR;
-        targetWristAngle = CONST_WRIST_FLOOR;
+    public void setHome() { // Starting position
+        targetShoulderAngle = SHOULDER_HOME;
+        targetTelescopeLength = TELESCOPE_HOME;
+        targetWristAngle = WRIST_HOME;
+        currentLevel = "home";
+    }
+
+    public void setFloor() { // Floor level
+        targetShoulderAngle = SHOULDER_FLOOR;
+        targetTelescopeLength = TELESCOPE_FLOOR;
+        targetWristAngle = WRIST_FLOOR;
+        currentLevel = "floor";
     }
 
     public void setTwo() { // 2nd level
-
         if (coneMode == false) {
-        targetShoulderAngle = CONST_SHOULDER_LVL2_CUBE;
-        targetTelescopeLength = CONST_TELESCOPE_LVL2_CUBE;
-        targetWristAngle = CONST_WRIST_LVL2_CUBE;
+            targetShoulderAngle = SHOULDER_LVL2_CUBE;
+            targetTelescopeLength = TELESCOPE_LVL2_CUBE;
+            targetWristAngle = WRIST_LVL2_CUBE;
+        } else if (coneMode == true) {
+            targetShoulderAngle = SHOULDER_LVL2_CONE;
+            targetTelescopeLength = TELESCOPE_LVL2_CONE;
+            targetWristAngle = WRIST_LVL2_CONE;
         }
-        if (coneMode == true) {
-        targetShoulderAngle = CONST_SHOULDER_LVL2_CONE;
-        targetTelescopeLength = CONST_TELESCOPE_LVL2_CONE;
-        targetWristAngle = CONST_WRIST_LVL2_CONE;
-        }
+        currentLevel = "2nd";
     }
 
-    public void setThree() { // third level
-
+    public void setThree() { // 3rd level
         if (coneMode == true) {
-        targetShoulderAngle = CONST_SHOULDER_LVL3_CONE;
-        targetTelescopeLength = CONST_TELESCOPE_LVL3_CONE;
-        targetWristAngle = CONST_WRIST_LVL3_CONE;
+            targetShoulderAngle = SHOULDER_LVL3_CONE;
+            targetTelescopeLength = TELESCOPE_LVL3_CONE;
+            targetWristAngle = WRIST_LVL3_CONE;
+        } else if (coneMode == false) {
+            targetShoulderAngle = SHOULDER_LVL3_CUBE;
+            targetTelescopeLength = TELESCOPE_LVL3_CUBE;
+            targetWristAngle = WRIST_LVL3_CUBE;
         }
-
-        if (coneMode == false) {
-        targetShoulderAngle = CONST_SHOULDER_LVL3_CUBE;
-        targetTelescopeLength = CONST_TELESCOPE_LVL3_CUBE;
-        targetWristAngle = CONST_WRIST_LVL3_CUBE;
-        }
+        currentLevel = "3rd";
     }
 
-    public void setPlayerArea() { // the human player place
-        targetShoulderAngle = CONST_SHOULDER_PLAYER;
-        targetTelescopeLength = CONST_TELESCOPE_PLAYER;
-        targetWristAngle = CONST_WRIST_PLAYER;
+    public void setPlayerArea() { // Human player shelf
+        targetShoulderAngle = SHOULDER_PLAYER;
+        targetTelescopeLength = TELESCOPE_PLAYER;
+        targetWristAngle = WRIST_PLAYER;
+        currentLevel = "player";
     }
 
     public void trimUp(){
@@ -124,55 +106,55 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         trim -= TRIM_STEP;
     }
 
-    public void setModeCone(){
+    public void setModeCone() {
         coneMode = true;
+        if (currentLevel == "2nd") {
+            setTwo();
+        } else if (currentLevel == "3rd") {
+            setThree();
+        }
     }
-    public void setModeCube(){
+    public void setModeCube() {
         coneMode = false;
+        if (currentLevel == "2nd") {
+            setTwo();
+        } else if (currentLevel == "3rd") {
+            setThree();
+        }
     }
 
-    
-    public void periodic(double trimJoystick) {
-        //setTelescopePos();
-        if(trimJoystick < -0.5)
-        {
-            trimUp();
-        }
-        else if(trimJoystick > 0.5)
-        {
-            trimDown();
-        }
-        if (targetShoulderAngle < getShoulderPos()){
+    @Override
+    public void periodic() {
+        // Move shoulder
+        if (targetShoulderAngle < getShoulderPos()) {
             shoulderMotor.set(-SHOULDER_SPEED_MULTIPLIER);
-        }
-        else if (targetShoulderAngle > getShoulderPos()){
+        } else if (targetShoulderAngle > getShoulderPos()) {
             shoulderMotor.set(SHOULDER_SPEED_MULTIPLIER);
-        }
-        else{
+        } else {
             shoulderMotor.set(0);
         }
-        if (targetTelescopeLength < getTelescopePos()){
+
+        // Move telescope
+        if (targetTelescopeLength < getTelescopePos()) {
             telescopeMotor.set(-TELESCOPE_SPEED_MULTIPLIER);
-        }
-        else if (targetTelescopeLength > getTelescopePos()){
+        } else if (targetTelescopeLength > getTelescopePos()) {
             telescopeMotor.set(TELESCOPE_SPEED_MULTIPLIER);
-        }
-        else{
+        } else {
             telescopeMotor.set(0);
         }
-        if (targetWristAngle < getWristPos()){
+
+        // Move wrist
+        if (targetWristAngle < getWristPos()) {
             wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
-        }
-        else if (targetWristAngle > getWristPos()){
+        } else if (targetWristAngle > getWristPos()) {
             wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
-        }
-        else{
+        } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }
     }
 
     private double getShoulderPos() {
-        return shoulderEncoder.getPosition();
+        return shoulderEncoder.getPosition() + trim;
     }
 
     private double getTelescopePos() {

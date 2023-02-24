@@ -36,12 +36,8 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Set up the default command for the drivetrain.
-        // The controls are for field-oriented driving:
-        // Left stick Y axis -> forward and backwards movement
-        // Left stick X axis -> left and right movement
-        // Right stick X axis -> rotation
+        // The controls are for field-oriented driving
 
-        // Configure the button bindings
         configureButtonBindings();
         
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
@@ -51,12 +47,14 @@ public class RobotContainer {
             () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
         
-        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(m_manipulatorStateSubsystem, () -> m_controller.getLeftY()));
+        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
+            m_manipulatorStateSubsystem,
+            () -> m_controller.getLeftY()
+        ));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
             m_gripSubsystem,
             () -> translateTriggers(m_controller.getLeftTriggerAxis(), m_controller.getRightTriggerAxis())));
-        
     }
 
     /**
@@ -69,38 +67,39 @@ public class RobotContainer {
         // Button 11 on the joystick zeros the gyroscope
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
-
+        
+        // Holding button 1 on the joystick slows drive speed to 40%
         new JoystickButton(m_joystick, 1)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(.4)))
             .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(1.0)));
-        // ? sets manipulator to home position
-        new JoystickButton(m_controller, 10) // A
+        
+        // A sets manipulator to home position
+        new JoystickButton(m_controller, 10)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
 
-        // ? sets manipulator to floor position
-        new JoystickButton(m_controller, 2) // X 
+        // X sets manipulator to floor position
+        new JoystickButton(m_controller, 2)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
 
-        // ? sets manipulator to lower scoring position
-        new JoystickButton(m_controller, 4) // Y 
+        // Y sets manipulator to lower scoring position
+        new JoystickButton(m_controller, 4)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setTwo()));
 
-        // ? sets manipulator to higher scoring position
-        new JoystickButton(m_controller, 2) // B
+        // B sets manipulator to higher scoring position
+        new JoystickButton(m_controller, 2)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
 
-        // ? sets manipulator to player station position
-        new JoystickButton(m_controller, 10) // right thumb button
+        // Right joystick button sets manipulator to player station position
+        new JoystickButton(m_controller, 10)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
         
-        // sets manipulator to cone mode
-        new JoystickButton(m_controller, 5) // this is the left bumper
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone())); 
+        // Left bumper sets manipulator to cone mode
+        new JoystickButton(m_controller, 5)
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone()));
 
-        // sets manipulator to cube mode
-        new JoystickButton(m_controller, 6) // this is the right bumper
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube())); 
-
+        // Right bumper sets manipulator to cube mode
+        new JoystickButton(m_controller, 6)
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube()));
     }
 
     /**

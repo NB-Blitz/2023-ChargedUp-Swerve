@@ -25,12 +25,13 @@ public class ManipulatorStateCommand extends CommandBase {
     public ManipulatorStateCommand(ManipulatorStateSubsystem manipulatorStateSubsystem, DoubleSupplier trimSupplier) {
         this.m_manipulatorStateSubsystem = manipulatorStateSubsystem;
         this.m_trim_Supplier = trimSupplier;
+        
         addRequirements(manipulatorStateSubsystem);
     }
 
     @Override
     public void execute() {
-        m_manipulatorStateSubsystem.periodic(m_trim_Supplier.getAsDouble());
+        m_manipulatorStateSubsystem.moveTrim(m_trim_Supplier.getAsDouble());
     }
 
     @Override

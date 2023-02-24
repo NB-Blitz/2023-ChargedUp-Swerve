@@ -105,11 +105,11 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     
     public void periodic(double trimJoystick) {
         //setTelescopePos();
-        if(trimJoystick > 0.5)
+        if(trimJoystick < -0.5)
         {
             trimUp();
         }
-        else if(trimJoystick < -0.5)
+        else if(trimJoystick > 0.5)
         {
             trimDown();
         }

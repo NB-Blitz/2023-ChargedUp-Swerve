@@ -44,15 +44,15 @@ public class RobotContainer {
             m_drivetrainSubsystem,
             () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getTwist()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+            () -> -modifyAxis(m_joystick.getTwist() * 0.6) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
         
         m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
             m_manipulatorStateSubsystem,
             () -> m_controller.getLeftY(),
-            () -> m_controller.getLeftY(),
+            () -> deadband(m_controller.getLeftY(), 0.2),
             () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper()),
-            () -> m_controller.getRightY()
+            () -> deadband(m_controller.getRawAxis(4), 0.2)
         ));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
@@ -73,15 +73,15 @@ public class RobotContainer {
         
         // Holding button 12 on the joystick slows drive speed to 40%
         new JoystickButton(m_joystick, 12)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.4)))
-            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.8)));
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.25)))
+            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.6)));
         
-        /*// A sets manipulator to home position
-        new JoystickButton(m_controller, 10)
+        // A sets manipulator to home position
+        new JoystickButton(m_controller, 1)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
 
         // X sets manipulator to floor position
-        new JoystickButton(m_controller, 2)
+        new JoystickButton(m_controller, 3)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
 
         // Y sets manipulator to lower scoring position
@@ -92,11 +92,11 @@ public class RobotContainer {
         new JoystickButton(m_controller, 2)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
 
-        // Right joystick button sets manipulator to player station position
+        /*// Right joystick button sets manipulator to player station position
         new JoystickButton(m_controller, 10)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));*/
         
-        // Left bumper sets manipulator to cone mode
+        /*// Left bumper sets manipulator to cone mode
         new JoystickButton(m_controller, 5)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone()));
 
@@ -133,7 +133,7 @@ public class RobotContainer {
 
     private static double modifyAxis(double value) {
         // Deadband
-        value = deadband(value, 0.20);
+        value = deadband(value, 0.05);
 
         // Square the axis
         value = Math.copySign(value * value, value);

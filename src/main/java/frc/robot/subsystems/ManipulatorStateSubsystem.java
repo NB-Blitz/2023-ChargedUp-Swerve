@@ -49,6 +49,10 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         tab.addDouble("Telescope Pos", () -> getTelescopePos());
         tab.addDouble("Wrist Pos", () -> getWristPos());
         tab.addDouble("Trim", () -> getTrim());
+
+        //tab.addDouble("Wrist Current", () -> wristMotor.getStatorCurrent());
+        //tab.addDouble("Shoulder Current", () -> shoulderMotor.getOutputCurrent());
+        //tab.addDouble("Telescope Current", () -> telescopeMotor.getOutputCurrent());
     }
 
     public void move(double shoulderSpeed, double telescopeSpeed, double wristSpeed) {
@@ -164,19 +168,20 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }*/
-        if (shoulderMotor.getOutputCurrent() < 5) {
+
+        if (shoulderMotor.getOutputCurrent() < 50) {
             shoulderMotor.set(shoulderSpeed * SHOULDER_SPEED_MULTIPLIER);
         } else {
             shoulderMotor.set(0);
         }
 
-        if (telescopeMotor.getOutputCurrent() < 5) {
+        if (telescopeMotor.getOutputCurrent() < 50) {
             telescopeMotor.set(telescopeSpeed * TELESCOPE_SPEED_MULTIPLIER);
         } else {
             telescopeMotor.set(0);
         }
 
-        if (wristMotor.getStatorCurrent() < 5) {
+        if (wristMotor.getStatorCurrent() < 30) {
             wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_MULTIPLIER);
         } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
@@ -192,7 +197,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
 
     private double getWristPos() {
-        return wristEncoder.getAbsolutePosition();
+        return wristEncoder.getAbsolutePosition() - WRIST_ENCODER_OFFSET;
     }
 
     private double getTrim() {

@@ -52,20 +52,21 @@ public final class Constants {
     public static final int GRIP_MOTOR_ID = 12;
 
     public static final int WRIST_ENCODER_ID = 17;
+    public static final double WRIST_ENCODER_OFFSET = 113.5; // TODO
 
-    public static final double SHOULDER_SPEED_MULTIPLIER = 0.1; // TODO
+    public static final double SHOULDER_SPEED_MULTIPLIER = 0.7; // TODO
     //public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
     //public static final double MIN_SHOULDER_ENCODER_VALUE = 0; // TODO
 
-    public static final double TELESCOPE_SPEED_MULTIPLIER = 0.1; // TODO
+    public static final double TELESCOPE_SPEED_MULTIPLIER = 0.7; // TODO
     //public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
     //public static final double MIN_TELESCOPE_ENCODER_VALUE = 0; // TODO
 
-    public static final double WRIST_SPEED_MULTIPLIER = 0.1; // TODO
+    public static final double WRIST_SPEED_MULTIPLIER = 0.8; // TODO
     //public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
     //public static final double MIN_WRIST_ENCODER_VALUE = 0; // TODO
 
-    public static final double GRIP_SPEED_MULTIPLIER = 0.1; // TODO
+    public static final double GRIP_SPEED_MULTIPLIER = 1.0; // TODO
     public static final double MAX_GRIP_ENCODER_VALUE = 360; // TODO
     public static final double MIN_GRIP_ENCODER_VALUE = 0; // TODO
 
@@ -73,21 +74,21 @@ public final class Constants {
     public static final double TELESCOPE_HOME = 0;
     public static final double WRIST_HOME = 0;
 
-    public static final double SHOULDER_FLOOR = 0; //TODO
-    public static final double TELESCOPE_FLOOR = 0; //TODO
-    public static final double WRIST_FLOOR = 0; //TODO
+    public static final double SHOULDER_FLOOR = 82; //TODO
+    public static final double TELESCOPE_FLOOR = 98; //TODO
+    public static final double WRIST_FLOOR = 229; //TODO
 
-    public static final double SHOULDER_LVL2_CUBE = 0; //TODO
+    public static final double SHOULDER_LVL2_CUBE = 164; //TODO
     public static final double TELESCOPE_LVL2_CUBE = 0; //TODO
-    public static final double WRIST_LVL2_CUBE = 0; //TODO
+    public static final double WRIST_LVL2_CUBE = 175; //TODO
 
     public static final double SHOULDER_LVL2_CONE = 0; //TODO
     public static final double TELESCOPE_LVL2_CONE = 0; //TODO
     public static final double WRIST_LVL2_CONE = 0; //TODO
 
-    public static final double SHOULDER_LVL3_CUBE = 0; //TODO
-    public static final double TELESCOPE_LVL3_CUBE = 0; //TODO
-    public static final double WRIST_LVL3_CUBE = 0; //TODO
+    public static final double SHOULDER_LVL3_CUBE = 186; //TODO
+    public static final double TELESCOPE_LVL3_CUBE = 185; //TODO
+    public static final double WRIST_LVL3_CUBE = 164; //TODO
 
     public static final double SHOULDER_LVL3_CONE = 0; //TODO
     public static final double TELESCOPE_LVL3_CONE = 0; //TODO

@@ -49,7 +49,10 @@ public class RobotContainer {
         
         m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
             m_manipulatorStateSubsystem,
-            () -> m_controller.getLeftY()
+            () -> m_controller.getLeftY(),
+            () -> m_controller.getLeftY(),
+            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper()),
+            () -> m_controller.getRightY()
         ));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
@@ -68,12 +71,12 @@ public class RobotContainer {
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
         
-        // Holding button 1 on the joystick slows drive speed to 40%
-        new JoystickButton(m_joystick, 1)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(.4)))
-            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(1.0)));
+        // Holding button 12 on the joystick slows drive speed to 40%
+        new JoystickButton(m_joystick, 12)
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.4)))
+            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.8)));
         
-        // A sets manipulator to home position
+        /*// A sets manipulator to home position
         new JoystickButton(m_controller, 10)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
 
@@ -99,7 +102,11 @@ public class RobotContainer {
 
         // Right bumper sets manipulator to cube mode
         new JoystickButton(m_controller, 6)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube()));
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube()));*/
+    }
+
+    public void sendManipulatorHome() {
+        m_manipulatorStateSubsystem.setHome();
     }
 
     /**
@@ -138,4 +145,10 @@ public class RobotContainer {
         return -left + right;
     }
 
+    private static double translateBumpers(boolean left, boolean right) {
+        double result = 0.0;
+        if (left) result--;
+        if (right) result++;
+        return result;
+    }
 }

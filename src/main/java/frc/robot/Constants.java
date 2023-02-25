@@ -51,25 +51,27 @@ public final class Constants {
     public static final int WRIST_MOTOR_ID = 11;
     public static final int GRIP_MOTOR_ID = 12;
 
-    public static final double SHOULDER_SPEED_MULTIPLIER = 0.5; // TODO
-    public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
-    public static final double MIN_SHOULDER_ENCODER_VALUE = 0; // TODO
+    public static final int WRIST_ENCODER_ID = 17;
 
-    public static final double TELESCOPE_SPEED_MULTIPLIER = 0.5; // TODO
-    public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
-    public static final double MIN_TELESCOPE_ENCODER_VALUE = 0; // TODO
+    public static final double SHOULDER_SPEED_MULTIPLIER = 0.1; // TODO
+    //public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
+    //public static final double MIN_SHOULDER_ENCODER_VALUE = 0; // TODO
 
-    public static final double WRIST_SPEED_MULTIPLIER = 0.5; // TODO
-    public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
-    public static final double MIN_WRIST_ENCODER_VALUE = 0; // TODO
+    public static final double TELESCOPE_SPEED_MULTIPLIER = 0.1; // TODO
+    //public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
+    //public static final double MIN_TELESCOPE_ENCODER_VALUE = 0; // TODO
 
-    public static final double GRIP_SPEED_MULTIPLIER = 0.5; // TODO
-    public static final double MAX_GRIP_ENCODER_VALUE = 3; // TODO
+    public static final double WRIST_SPEED_MULTIPLIER = 0.1; // TODO
+    //public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
+    //public static final double MIN_WRIST_ENCODER_VALUE = 0; // TODO
+
+    public static final double GRIP_SPEED_MULTIPLIER = 0.1; // TODO
+    public static final double MAX_GRIP_ENCODER_VALUE = 360; // TODO
     public static final double MIN_GRIP_ENCODER_VALUE = 0; // TODO
 
-    public static final double SHOULDER_HOME = 0; //TODO
-    public static final double TELESCOPE_HOME = 0; //TODO
-    public static final double WRIST_HOME = 0; //TODO
+    public static final double SHOULDER_HOME = 0;
+    public static final double TELESCOPE_HOME = 0;
+    public static final double WRIST_HOME = 0;
 
     public static final double SHOULDER_FLOOR = 0; //TODO
     public static final double TELESCOPE_FLOOR = 0; //TODO

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,6 +19,11 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     private final RelativeEncoder shoulderEncoder;
     private final RelativeEncoder telescopeEncoder;
+    private final CANCoder wristEncoder;
+
+    private double shoulderSpeed;
+    private double telescopeSpeed;
+    private double wristSpeed;
 
     private double targetShoulderAngle;
     private double targetTelescopeLength;
@@ -34,14 +40,21 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         this.wristMotor = new TalonSRX(WRIST_MOTOR_ID);
         this.shoulderEncoder = this.shoulderMotor.getEncoder();
         this.telescopeEncoder = this.telescopeMotor.getEncoder();
+        this.wristEncoder = new CANCoder(WRIST_ENCODER_ID);
         this.currentLevel = "home";
         this.coneMode = true;
         this.trim = 0;
 
-        tab.addDouble("Shoulder Position", () -> getShoulderPos());
-        tab.addDouble("Telescope Position", () -> getTelescopePos());
-        tab.addDouble("Wrist Position", () -> getWristPos());
+        tab.addDouble("Shoulder Pos", () -> getShoulderPos());
+        tab.addDouble("Telescope Pos", () -> getTelescopePos());
+        tab.addDouble("Wrist Pos", () -> getWristPos());
         tab.addDouble("Trim", () -> getTrim());
+    }
+
+    public void move(double shoulderSpeed, double telescopeSpeed, double wristSpeed) {
+        this.shoulderSpeed = shoulderSpeed;
+        this.telescopeSpeed = telescopeSpeed;
+        this.wristSpeed = wristSpeed;
     }
 
     public void moveTrim(double trimJoystick) {
@@ -125,7 +138,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Move shoulder
+        /*// Move shoulder
         if (targetShoulderAngle < getShoulderPos()) {
             shoulderMotor.set(-SHOULDER_SPEED_MULTIPLIER);
         } else if (targetShoulderAngle > getShoulderPos()) {
@@ -150,6 +163,23 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
             wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
         } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
+        }*/
+        if (shoulderMotor.getOutputCurrent() < 5) {
+            shoulderMotor.set(shoulderSpeed * SHOULDER_SPEED_MULTIPLIER);
+        } else {
+            shoulderMotor.set(0);
+        }
+
+        if (telescopeMotor.getOutputCurrent() < 5) {
+            telescopeMotor.set(telescopeSpeed * TELESCOPE_SPEED_MULTIPLIER);
+        } else {
+            telescopeMotor.set(0);
+        }
+
+        if (wristMotor.getStatorCurrent() < 5) {
+            wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_MULTIPLIER);
+        } else {
+            wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }
     }
 
@@ -162,7 +192,7 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
 
     private double getWristPos() {
-        return wristMotor.getSelectedSensorPosition();
+        return wristEncoder.getAbsolutePosition();
     }
 
     private double getTrim() {

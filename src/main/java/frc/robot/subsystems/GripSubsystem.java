@@ -19,7 +19,7 @@ public class GripSubsystem extends SubsystemBase {
 
         this.gripMotor = new TalonSRX(GRIP_MOTOR_ID);
 
-        tab.addDouble("Grip Position", () -> getGripPos());
+        tab.addDouble("Grip Pos", () -> getGripPos());
     }
 
     public void move(double gripSpeed) {

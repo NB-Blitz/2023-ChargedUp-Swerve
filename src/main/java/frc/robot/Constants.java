@@ -13,15 +13,14 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    /*************** Drivetrain ***************/
     /**
      * The left-to-right distance between the drivetrain wheels
-     *
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 18.5;
     /**
-     * The front-to-back distance between the drivetrain wheels.
-     *
+     * The front-to-back distance between the drivetrain wheels
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 19.5;
@@ -46,29 +45,40 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(25.1);
 
-    public static final int SHOULDER_MOTOR_ID = 9;
-    public static final int TELESCOPE_MOTOR_ID = 10;
-    public static final int WRIST_MOTOR_ID = 11;
-    public static final int GRIP_MOTOR_ID = 12;
 
-    public static final int WRIST_ENCODER_ID = 17;
-    public static final double WRIST_ENCODER_OFFSET = 246.5; // TODO
+    /*************** Shoulder ***************/
+    public static final int SHOULDER_MOTOR_ID = 9;
 
     public static final double SHOULDER_SPEED_MULTIPLIER = 0.7; // TODO
+    public static final double SHOULDER_ROT_PER_DEG = 726.15 / 360.0;
     //public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
-    //public static final double MIN_SHOULDER_ENCODER_VALUE = 0; // TODO
+
+
+    /*************** Telescope ***************/
+    public static final int TELESCOPE_MOTOR_ID = 10;
 
     public static final double TELESCOPE_SPEED_MULTIPLIER = 0.7; // TODO
     //public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
-    //public static final double MIN_TELESCOPE_ENCODER_VALUE = 0; // TODO
+
+
+    /*************** Wrist ***************/
+    public static final int WRIST_MOTOR_ID = 11;
+    public static final int WRIST_ENCODER_ID = 17;
 
     public static final double WRIST_SPEED_MULTIPLIER = 0.8; // TODO
+    public static final double WRIST_ENCODER_OFFSET = 246.5;
     //public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
-    //public static final double MIN_WRIST_ENCODER_VALUE = 0; // TODO
 
+
+    /*************** Grip ***************/
+    public static final int GRIP_MOTOR_ID = 12;
+    
     public static final double GRIP_SPEED_MULTIPLIER = 1.0; // TODO
     public static final double MAX_GRIP_ENCODER_VALUE = 360; // TODO
-    public static final double MIN_GRIP_ENCODER_VALUE = 0; // TODO
+
+
+    /*************** Manipulator Positions ***************/
+    public static final double ANGLE_ERROR = 1;
 
     public static final double SHOULDER_HOME = 0;
     public static final double TELESCOPE_HOME = 0;
@@ -97,7 +107,5 @@ public final class Constants {
     public static final double SHOULDER_PLAYER = 0; //TODO
     public static final double TELESCOPE_PLAYER = 0; //TODO
     public static final double WRIST_PLAYER = 0; //TODO
-
-    public static final double TRIM_STEP = .5;
 }
 

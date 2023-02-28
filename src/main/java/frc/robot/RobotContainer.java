@@ -42,17 +42,15 @@ public class RobotContainer {
         
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -modifyAxis(m_joystick.getY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getTwist() * 0.6) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+            () -> -modifyAxis(m_joystick.getY(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_joystick.getX(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_joystick.getTwist() * 0.6, 0.05) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
         
         m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
             m_manipulatorStateSubsystem,
-            () -> m_controller.getLeftY(),
-            () -> deadband(m_controller.getLeftY(), 0.2),
-            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper()),
-            () -> deadband(m_controller.getRawAxis(4), 0.2)
+            () -> modifyAxis(m_controller.getLeftY(), 0.2),
+            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper())
         ));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
@@ -71,7 +69,7 @@ public class RobotContainer {
         new JoystickButton(m_joystick, 11)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
         
-        // Holding button 12 on the joystick slows drive speed to 40%
+        // Holding button 12 on the joystick slows drive speed
         new JoystickButton(m_joystick, 12)
             .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.25)))
             .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.6)));
@@ -131,9 +129,9 @@ public class RobotContainer {
         }
     }
 
-    private static double modifyAxis(double value) {
+    private static double modifyAxis(double value, double deadband) {
         // Deadband
-        value = deadband(value, 0.05);
+        value = deadband(value, deadband);
 
         // Square the axis
         value = Math.copySign(value * value, value);

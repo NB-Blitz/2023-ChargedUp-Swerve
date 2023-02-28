@@ -5,8 +5,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,52 +24,44 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     private final RelativeEncoder telescopeEncoder;
     private final CANCoder wristEncoder;
 
+    private final DigitalInput shoulderSwitch;
+    private final SparkMaxLimitSwitch telescopeSwitch;
+
     private double shoulderSpeed;
     private double telescopeSpeed;
-    private double wristSpeed;
 
     private double targetShoulderAngle;
     private double targetTelescopeLength;
     private double targetWristAngle;
     private String currentLevel;
     private boolean coneMode;
-    private double trim;
 
     public ManipulatorStateSubsystem() {
         ShuffleboardTab tab = Shuffleboard.getTab("Manipulator");
 
-        this.shoulderMotor = new CANSparkMax(SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        this.telescopeMotor = new CANSparkMax(TELESCOPE_MOTOR_ID, MotorType.kBrushless);
-        this.wristMotor = new TalonSRX(WRIST_MOTOR_ID);
-        this.shoulderEncoder = this.shoulderMotor.getEncoder();
-        this.telescopeEncoder = this.telescopeMotor.getEncoder();
-        this.wristEncoder = new CANCoder(WRIST_ENCODER_ID);
-        this.currentLevel = "home";
-        this.coneMode = true;
-        this.trim = 0;
+        shoulderMotor = new CANSparkMax(SHOULDER_MOTOR_ID, MotorType.kBrushless);
+        telescopeMotor = new CANSparkMax(TELESCOPE_MOTOR_ID, MotorType.kBrushless);
+        wristMotor = new TalonSRX(WRIST_MOTOR_ID);
+        shoulderEncoder = this.shoulderMotor.getEncoder();
+        telescopeEncoder = this.telescopeMotor.getEncoder();
+        wristEncoder = new CANCoder(WRIST_ENCODER_ID);
+        shoulderSwitch = new DigitalInput(0);
+        telescopeSwitch = telescopeMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        currentLevel = "home";
+        coneMode = true;
 
-        tab.addDouble("Shoulder Pos", () -> getShoulderPos());
+        tab.addDouble("Shoulder Angle", () -> getShoulderAngle());
         tab.addDouble("Telescope Pos", () -> getTelescopePos());
-        tab.addDouble("Wrist Pos", () -> getWristPos());
-        tab.addDouble("Trim", () -> getTrim());
+        tab.addDouble("Wrist Angle", () -> getWristAngle());
 
         //tab.addDouble("Wrist Current", () -> wristMotor.getStatorCurrent());
         //tab.addDouble("Shoulder Current", () -> shoulderMotor.getOutputCurrent());
         //tab.addDouble("Telescope Current", () -> telescopeMotor.getOutputCurrent());
     }
 
-    public void move(double shoulderSpeed, double telescopeSpeed, double wristSpeed) {
+    public void move(double shoulderSpeed, double telescopeSpeed) {
         this.shoulderSpeed = shoulderSpeed;
         this.telescopeSpeed = telescopeSpeed;
-        this.wristSpeed = wristSpeed;
-    }
-
-    public void moveTrim(double trimJoystick) {
-        if (trimJoystick < -0.5) {
-            trimUp();
-        } else if (trimJoystick > 0.5) {
-            trimDown();
-        }
     }
 
     public void setHome() { // Starting position
@@ -116,13 +111,6 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         currentLevel = "player";
     }
 
-    public void trimUp(){
-        trim += TRIM_STEP;
-    }
-    public void trimDown(){
-        trim -= TRIM_STEP;
-    }
-
     public void setModeCone() {
         coneMode = true;
         if (currentLevel == "2nd") {
@@ -143,68 +131,79 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         /*// Move shoulder
-        if (targetShoulderAngle < getShoulderPos()) {
+        if (targetShoulderAngle < getShoulderPos() - ENCODER_ERROR) {
             shoulderMotor.set(-SHOULDER_SPEED_MULTIPLIER);
-        } else if (targetShoulderAngle > getShoulderPos()) {
+        } else if (targetShoulderAngle > getShoulderPos() + ENCODER_ERROR) {
             shoulderMotor.set(SHOULDER_SPEED_MULTIPLIER);
         } else {
             shoulderMotor.set(0);
         }
 
         // Move telescope
-        if (targetTelescopeLength < getTelescopePos()) {
+        if (targetTelescopeLength < getTelescopePos() - ENCODER_ERROR) {
             telescopeMotor.set(-TELESCOPE_SPEED_MULTIPLIER);
-        } else if (targetTelescopeLength > getTelescopePos()) {
+        } else if (targetTelescopeLength > getTelescopePos() + ENCODER_ERROR) {
             telescopeMotor.set(TELESCOPE_SPEED_MULTIPLIER);
         } else {
             telescopeMotor.set(0);
         }
 
         // Move wrist
-        if (targetWristAngle < getWristPos()) {
+        if (targetWristAngle < getWristPos() - ENCODER_ERROR) {
             wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
-        } else if (targetWristAngle > getWristPos()) {
+        } else if (targetWristAngle > getWristPos() + ENCODER_ERROR) {
             wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
         } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }*/
 
-        if (shoulderMotor.getOutputCurrent() < 50) {
-            shoulderMotor.set(shoulderSpeed * SHOULDER_SPEED_MULTIPLIER);
-        } else {
+        // Shoulder movement
+        if (shoulderSwitch.get()) {
+            shoulderEncoder.setPosition(0);
+        }
+        
+        if (shoulderSwitch.get() && shoulderSpeed <= 0) {
             shoulderMotor.set(0);
-        }
-
-        if (telescopeMotor.getOutputCurrent() < 50) {
-            telescopeMotor.set(telescopeSpeed * TELESCOPE_SPEED_MULTIPLIER);
         } else {
-            telescopeMotor.set(0);
+            shoulderMotor.set(shoulderSpeed * SHOULDER_SPEED_MULTIPLIER);
         }
 
-        if (wristMotor.getStatorCurrent() < 30) {
-            wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_MULTIPLIER);
+        // Telescope movement
+        if (telescopeSpeed < 0 && getTelescopePos() < 20) {
+            telescopeMotor.set(telescopeSpeed * 0.4);
+        } else {
+            telescopeMotor.set(telescopeSpeed * TELESCOPE_SPEED_MULTIPLIER);
+        }
+
+        // Wrist movement
+        if (getShoulderAngle() > 30) {
+            targetWristAngle = 90 + getShoulderAngle();
+        } else {
+            targetWristAngle = 0;
+        }
+
+        if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
+            wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
+        } else if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
+            wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
         } else {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }
     }
 
-    private double getShoulderPos() {
-        return shoulderEncoder.getPosition() + trim;
+    private double getShoulderAngle() {
+        return shoulderEncoder.getPosition() / SHOULDER_ROT_PER_DEG;
     }
 
     private double getTelescopePos() {
         return telescopeEncoder.getPosition();
     }
 
-    private double getWristPos() {
+    private double getWristAngle() {
         double pos = wristEncoder.getAbsolutePosition() - WRIST_ENCODER_OFFSET;
         if (pos < 0) {
             return 360 - Math.abs(pos);
         }
         return pos;
-    }
-
-    private double getTrim() {
-        return trim;
     }
 }

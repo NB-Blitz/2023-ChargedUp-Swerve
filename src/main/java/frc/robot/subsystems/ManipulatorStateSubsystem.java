@@ -197,7 +197,11 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
 
     private double getWristPos() {
-        return wristEncoder.getAbsolutePosition() - WRIST_ENCODER_OFFSET;
+        double pos = wristEncoder.getAbsolutePosition() - WRIST_ENCODER_OFFSET;
+        if (pos < 0) {
+            return 360 - Math.abs(pos);
+        }
+        return pos;
     }
 
     private double getTrim() {

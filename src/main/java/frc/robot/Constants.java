@@ -52,7 +52,7 @@ public final class Constants {
     public static final int GRIP_MOTOR_ID = 12;
 
     public static final int WRIST_ENCODER_ID = 17;
-    public static final double WRIST_ENCODER_OFFSET = 113.5; // TODO
+    public static final double WRIST_ENCODER_OFFSET = 246.5; // TODO
 
     public static final double SHOULDER_SPEED_MULTIPLIER = 0.7; // TODO
     //public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO

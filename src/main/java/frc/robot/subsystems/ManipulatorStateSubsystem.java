@@ -54,6 +54,8 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         tab.addDouble("Telescope Pos", () -> getTelescopePos());
         tab.addDouble("Wrist Angle", () -> getWristAngle());
 
+        tab.addBoolean("TelescopeLimitSwitch", () -> telescopeSwitch.isPressed());
+
         //tab.addDouble("Wrist Current", () -> wristMotor.getStatorCurrent());
         //tab.addDouble("Shoulder Current", () -> shoulderMotor.getOutputCurrent());
         //tab.addDouble("Telescope Current", () -> telescopeMotor.getOutputCurrent());
@@ -157,6 +159,15 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
             wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
         }*/
 
+        if(telescopeSwitch.isPressed()){
+            System.out.println("switch is pressed");
+        }
+
+        else{
+            System.out.println("switch is not pressed");
+        }
+
+
         // Shoulder movement
         if (shoulderSwitch.get()) {
             shoulderEncoder.setPosition(0);
@@ -182,13 +193,14 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
             targetWristAngle = 0;
         }
 
-        if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
-            wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
-        } else if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
-            wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
-        } else {
-            wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
-        }
+        //if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
+        //    wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
+        //} else if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
+        //    wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
+        //} else {
+        //     wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
+        //}
+        wristMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
     }
 
     private double getShoulderAngle() {

@@ -10,7 +10,6 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -79,15 +78,15 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
     }
 
     public void setTwo() { // 2nd level
-        targetShoulderAngle = SHOULDER_LVL2_CUBE;
-        targetTelescopeLength = TELESCOPE_LVL2_CUBE;
-        targetWristAngle = WRIST_LVL2_CUBE;
+        targetShoulderAngle = SHOULDER_LVL2;
+        targetTelescopeLength = TELESCOPE_LVL2;
+        targetWristAngle = WRIST_LVL2;
     }
 
     public void setThree() { // 3rd level
-        targetShoulderAngle = SHOULDER_LVL3_CONE;
-        targetTelescopeLength = TELESCOPE_LVL3_CONE;
-        targetWristAngle = WRIST_LVL3_CONE;
+        targetShoulderAngle = SHOULDER_LVL3;
+        targetTelescopeLength = TELESCOPE_LVL3;
+        targetWristAngle = WRIST_LVL3;
     }
 
     public void setPlayerArea() { // Human player shelf

@@ -51,14 +51,14 @@ public final class Constants {
 
     public static final double SHOULDER_SPEED_MULTIPLIER = 0.7; // TODO
     public static final double SHOULDER_ROT_PER_DEG = 726.15 / 360.0;
-    //public static final double MAX_SHOULDER_ENCODER_VALUE = 5; // TODO
+    public static final double MAX_SHOULDER_ANGLE = 120; // TODO
 
 
     /*************** Telescope ***************/
     public static final int TELESCOPE_MOTOR_ID = 10;
 
     public static final double TELESCOPE_SPEED_MULTIPLIER = 0.7; // TODO
-    //public static final double MAX_TELESCOPE_ENCODER_VALUE = 5; // TODO
+    public static final double MAX_TELESCOPE_ENCODER_VALUE = 9999999; // TODO
 
 
     /*************** Wrist ***************/

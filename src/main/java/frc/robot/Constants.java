@@ -88,13 +88,13 @@ public final class Constants {
     public static final double TELESCOPE_FLOOR = 98; //TODO
     public static final double WRIST_FLOOR = 229; //TODO
 
-    public static final double SHOULDER_LVL2_CUBE = 164; //TODO
+    public static final double SHOULDER_LVL2_CUBE = 145; //TODO
     public static final double TELESCOPE_LVL2_CUBE = 0; //TODO
-    public static final double WRIST_LVL2_CUBE = 175; //TODO
+    public static final double WRIST_LVL2_CUBE = 182; //TODO
 
-    public static final double SHOULDER_LVL2_CONE = 0; //TODO
+    public static final double SHOULDER_LVL2_CONE = 145; //TODO
     public static final double TELESCOPE_LVL2_CONE = 0; //TODO
-    public static final double WRIST_LVL2_CONE = 0; //TODO
+    public static final double WRIST_LVL2_CONE = 182; //TODO
 
     public static final double SHOULDER_LVL3_CUBE = 186; //TODO
     public static final double TELESCOPE_LVL3_CUBE = 185; //TODO

@@ -90,17 +90,9 @@ public class RobotContainer {
         new JoystickButton(m_controller, 2)
             .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
 
-        /*// Right joystick button sets manipulator to player station position
+        // Right joystick button sets manipulator to player station position
         new JoystickButton(m_controller, 10)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));*/
-        
-        /*// Left bumper sets manipulator to cone mode
-        new JoystickButton(m_controller, 5)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCone()));
-
-        // Right bumper sets manipulator to cube mode
-        new JoystickButton(m_controller, 6)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setModeCube()));*/
+            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
     }
 
     public void sendManipulatorHome() {

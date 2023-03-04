@@ -42,8 +42,8 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         shoulderMotor = new CANSparkMax(SHOULDER_MOTOR_ID, MotorType.kBrushless);
         telescopeMotor = new CANSparkMax(TELESCOPE_MOTOR_ID, MotorType.kBrushless);
         wristMotor = new TalonSRX(WRIST_MOTOR_ID);
-        shoulderEncoder = this.shoulderMotor.getEncoder();
-        telescopeEncoder = this.telescopeMotor.getEncoder();
+        shoulderEncoder = shoulderMotor.getEncoder();
+        telescopeEncoder = telescopeMotor.getEncoder();
         wristEncoder = new CANCoder(WRIST_ENCODER_ID);
         shoulderSensor = new ColorSensorV3(I2C.Port.kOnboard);
         telescopeSwitch = telescopeMotor.getReverseLimitSwitch(Type.kNormallyOpen);
@@ -52,8 +52,8 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
         tab.addDouble("Telescope Pos", () -> getTelescopePos());
         tab.addDouble("Wrist Angle", () -> getWristAngle());
 
-        tab.addBoolean("TelescopeLimitSwitch", () -> telescopeSwitch.isPressed());
         tab.addString("Shoulder Color", () -> shoulderSensor.getColor().toString());
+        tab.addBoolean("Telescope Switch", () -> telescopeSwitch.isPressed());
 
         //tab.addDouble("Wrist Current", () -> wristMotor.getStatorCurrent());
         //tab.addDouble("Shoulder Current", () -> shoulderMotor.getOutputCurrent());

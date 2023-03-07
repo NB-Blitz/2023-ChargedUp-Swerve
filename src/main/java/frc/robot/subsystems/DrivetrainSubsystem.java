@@ -82,8 +82,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         tab.addDouble("Gyro", () -> getGyroscopeRotation().getDegrees());
         tab.addDouble("Gyro Offset", () -> gyroOffset);
 
-        tab.addDouble("Drive %",  () -> drivePercent);
-
         m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             tab.getLayout("Front Left Module", BuiltInLayouts.kList)
@@ -155,7 +153,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(getRawGyroscopeRotation() - gyroOffset);
+        double adjusted = getRawGyroscopeRotation() - gyroOffset;
+        if (adjusted < 0) {
+            adjusted = 360 + adjusted;
+        }
+        return Rotation2d.fromDegrees(adjusted);
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {

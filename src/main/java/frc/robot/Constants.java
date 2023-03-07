@@ -14,15 +14,10 @@ package frc.robot;
  */
 public final class Constants {
     /*************** Drivetrain ***************/
-    /**
-     * The left-to-right distance between the drivetrain wheels
-     * Should be measured from center to center.
-     */
+    // Left-to-right distance between the drivetrain wheels
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 18.5;
-    /**
-     * The front-to-back distance between the drivetrain wheels
-     * Should be measured from center to center.
-     */
+
+    // Front-to-back distance between the drivetrain wheels
     public static final double DRIVETRAIN_WHEELBASE_METERS = 19.5;
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 2;
@@ -49,8 +44,8 @@ public final class Constants {
     /*************** Shoulder ***************/
     public static final int SHOULDER_MOTOR_ID = 9;
 
-    public static final double SHOULDER_SPEED_MULTIPLIER = 0.7; // TODO
-    public static final double SHOULDER_ROT_PER_DEG = 726.15 / 360.0;
+    public static final double SHOULDER_SPEED_MULTIPLIER = 0.9; // TODO
+    public static final double SHOULDER_ANGLE_SCALE = 11;
     public static final double MAX_SHOULDER_ANGLE = 120; // TODO
 
 
@@ -65,9 +60,8 @@ public final class Constants {
     public static final int WRIST_MOTOR_ID = 11;
     public static final int WRIST_ENCODER_ID = 17;
 
-    public static final double WRIST_SPEED_MULTIPLIER = 0.8; // TODO
-    public static final double WRIST_ENCODER_OFFSET = 246.5;
-    //public static final double MAX_WRIST_ENCODER_VALUE = 3; // TODO
+    public static final double WRIST_SPEED_MULTIPLIER = 0.4; // TODO
+    public static final double WRIST_ENCODER_OFFSET = 174.6; // TODO
 
 
     /*************** Grip ***************/
@@ -78,13 +72,11 @@ public final class Constants {
 
 
     /*************** Manipulator Positions ***************/
-    public static final double ANGLE_ERROR = 1;
-
     public static final double SHOULDER_HOME = 0;
     public static final double TELESCOPE_HOME = 0;
     public static final double WRIST_HOME = 0;
 
-    public static final double SHOULDER_FLOOR = 82; //TODO
+    public static final double SHOULDER_FLOOR = 30; //TODO
     public static final double TELESCOPE_FLOOR = 98; //TODO
     public static final double WRIST_FLOOR = 229; //TODO
 
@@ -99,5 +91,7 @@ public final class Constants {
     public static final double SHOULDER_PLAYER = 0; //TODO
     public static final double TELESCOPE_PLAYER = 0; //TODO
     public static final double WRIST_PLAYER = 0; //TODO
+
+    public static final double ANGLE_ERROR = 3;
 }
 

@@ -49,8 +49,9 @@ public class RobotContainer {
         
         m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
             m_manipulatorStateSubsystem,
-            () -> modifyAxis(m_controller.getLeftY(), 0.2),
-            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper())
+            () -> -modifyAxis(m_controller.getLeftY(), 0.2),
+            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper()),
+            () -> -modifyAxis(m_controller.getRawAxis(5), 0.2)
         ));
 
         m_gripSubsystem.setDefaultCommand(new GripCommand(
@@ -71,8 +72,8 @@ public class RobotContainer {
         
         // Holding button 12 on the joystick slows drive speed
         new JoystickButton(m_joystick, 12)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.25)))
-            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.6)));
+            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.5)))
+            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.8)));
         
         // A sets manipulator to home position
         new JoystickButton(m_controller, 1)

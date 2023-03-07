@@ -15,13 +15,16 @@ public class ManipulatorStateCommand extends CommandBase {
     private final ManipulatorStateSubsystem m_manipulatorStateSubsystem;
     private final DoubleSupplier m_shoulderSupplier;
     private final DoubleSupplier m_telescopeSupplier;
+    private final DoubleSupplier m_wristSupplier;
 
     public ManipulatorStateCommand(ManipulatorStateSubsystem manipulatorStateSubsystem,
                                    DoubleSupplier shoulderSupplier,
-                                   DoubleSupplier telescopeSupplier) {
+                                   DoubleSupplier telescopeSupplier,
+                                   DoubleSupplier wristSupplier) {
         this.m_manipulatorStateSubsystem = manipulatorStateSubsystem;
         this.m_shoulderSupplier = shoulderSupplier;
         this.m_telescopeSupplier = telescopeSupplier;
+        this.m_wristSupplier = wristSupplier;
         
         addRequirements(manipulatorStateSubsystem);
     }
@@ -30,7 +33,8 @@ public class ManipulatorStateCommand extends CommandBase {
     public void execute() {
         m_manipulatorStateSubsystem.move(
             m_shoulderSupplier.getAsDouble(),
-            m_telescopeSupplier.getAsDouble()
+            m_telescopeSupplier.getAsDouble(),
+            m_wristSupplier.getAsDouble()
         );
     }
 

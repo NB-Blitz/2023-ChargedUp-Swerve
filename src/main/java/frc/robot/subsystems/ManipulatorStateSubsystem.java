@@ -133,8 +133,8 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
             shoulderEncoder.setPosition(0);
         }
         
-        if ((isShoulderHome() && shoulderSpeed <= 0) //||
-            /*(getShoulderAngle() >= MAX_SHOULDER_ANGLE && shoulderSpeed >= 0) //||
+        if ((isShoulderHome() && shoulderSpeed <= 0) ||
+            (getShoulderAngle() >= MAX_SHOULDER_ANGLE && shoulderSpeed >= 0) //||
             /*(getShoulderAngle() <= SHOULDER_FLOOR && shoulderSpeed < 0 && !telescopeSwitch.isPressed())*/) {
             shoulderMotor.set(0);
         } else {
@@ -162,30 +162,38 @@ public class ManipulatorStateSubsystem extends SubsystemBase {
             targetWristAngle = 0;
         }
 
-        // if (targetWristAngle == 0) {
-        //     if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
-        //         if (getWristAngle() > 10 && getWristAngle() < 300) {
-        //             wristMotor.set(TalonSRXControlMode.PercentOutput, 0.8);
-        //         } else if (getWristAngle() > 300) {
-        //             wristMotor.set(TalonSRXControlMode.PercentOutput, -0.3);
-        //         } else {
-        //             wristMotor.set(TalonSRXControlMode.PercentOutput, 0.3);
-        //         }
-        //     } else if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
-        //         wristMotor.set(TalonSRXControlMode.PercentOutput, -0.3);
-        //     } else {
-        //         wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
-        //     }
-        // } else {
-        //     if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
-        //         wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_MULTIPLIER);
-        //     } else if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
-        //         wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_MULTIPLIER);
-        //     } else {
-        //         wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
-        //     }
-        // }
-        wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_MULTIPLIER);
+        if (targetWristAngle == 0) {
+            if (getWristAngle() > targetWristAngle + ANGLE_ERROR && getWristAngle() < 360 - ANGLE_ERROR) {
+                if (getWristAngle() > 300) {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
+                } else if (getWristAngle() > 10) {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_FAST_MULT);
+                } else {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_SLOW_MULT);
+                }
+            } else {
+                wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
+            }
+        } else {
+            if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
+                if (getWristAngle() > 300) {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
+                } else if (getWristAngle() - targetWristAngle > 10) {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_FAST_MULT);
+                } else {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_SLOW_MULT);
+                }
+            } else if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
+                if (targetWristAngle - getWristAngle() > 10) {
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_FAST_MULT);
+                } else { 
+                    wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
+                }
+            } else {
+                wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
+            }
+        }
+        // wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_MULTIPLIER);
     }
 
     private double getShoulderAngle() {

@@ -46,21 +46,22 @@ public final class Constants {
 
     public static final double SHOULDER_SPEED_MULTIPLIER = 0.9; // TODO
     public static final double SHOULDER_ANGLE_SCALE = 11;
-    public static final double MAX_SHOULDER_ANGLE = 120;
+    public static final double MAX_SHOULDER_ANGLE = 110;
 
 
     /*************** Telescope ***************/
     public static final int TELESCOPE_MOTOR_ID = 10;
 
     public static final double TELESCOPE_SPEED_MULTIPLIER = 0.7; // TODO
-    public static final double MAX_TELESCOPE_ENCODER_VALUE = 9999999; // TODO
+    public static final double MAX_TELESCOPE_ENCODER_VALUE = 207; // TODO
 
 
     /*************** Wrist ***************/
     public static final int WRIST_MOTOR_ID = 11;
     public static final int WRIST_ENCODER_ID = 17;
 
-    public static final double WRIST_SPEED_MULTIPLIER = 0.4;
+    public static final double WRIST_SPEED_FAST_MULT = 0.8;
+    public static final double WRIST_SPEED_SLOW_MULT = 0.25;
     public static final double WRIST_ENCODER_OFFSET = 174.6;
 
 
@@ -92,6 +93,6 @@ public final class Constants {
     public static final double TELESCOPE_PLAYER = 0; // TODO
     public static final double WRIST_PLAYER = 0; // Already handled
 
-    public static final double ANGLE_ERROR = 3;
+    public static final double ANGLE_ERROR = 2;
 }
 

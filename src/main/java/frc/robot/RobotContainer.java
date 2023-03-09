@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.commands.GripCommand;
-import frc.robot.commands.ManipulatorStateCommand;
+import frc.robot.commands.ManipulatorCommand;
 import frc.robot.subsystems.GripSubsystem;
-import frc.robot.subsystems.ManipulatorStateSubsystem;
+import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -25,11 +25,11 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-    private final ManipulatorStateSubsystem m_manipulatorStateSubsystem = new ManipulatorStateSubsystem();
-    private final GripSubsystem m_gripSubsystem = new GripSubsystem();
-    private final Joystick m_joystick = new Joystick(0);
-    private final XboxController m_controller = new XboxController(1);
+    private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+    private final ManipulatorSubsystem manipulatorSubsystem = new ManipulatorSubsystem();
+    private final GripSubsystem gripSubsystem = new GripSubsystem();
+    private final Joystick joystick = new Joystick(0);
+    private final XboxController controller = new XboxController(1);
     
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -40,23 +40,23 @@ public class RobotContainer {
 
         configureButtonBindings();
         
-        m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
-            m_drivetrainSubsystem,
-            () -> -modifyAxis(m_joystick.getY(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getX(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_joystick.getTwist() * 0.6, 0.05) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+        drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+            drivetrainSubsystem,
+            () -> -modifyAxis(joystick.getY(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(joystick.getX(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(joystick.getTwist() * 0.6, 0.05) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
         ));
         
-        m_manipulatorStateSubsystem.setDefaultCommand(new ManipulatorStateCommand(
-            m_manipulatorStateSubsystem,
-            () -> -modifyAxis(m_controller.getLeftY(), 0.2),
-            () -> translateBumpers(m_controller.getLeftBumper(), m_controller.getRightBumper()),
-            () -> -modifyAxis(m_controller.getRawAxis(5), 0.2)
+        manipulatorSubsystem.setDefaultCommand(new ManipulatorCommand(
+            manipulatorSubsystem,
+            () -> -modifyAxis(controller.getLeftY(), 0.2),
+            () -> translateBumpers(controller.getLeftBumper(), controller.getRightBumper()),
+            () -> -modifyAxis(controller.getRawAxis(5), 0.2)
         ));
 
-        m_gripSubsystem.setDefaultCommand(new GripCommand(
-            m_gripSubsystem,
-            () -> translateTriggers(m_controller.getLeftTriggerAxis(), m_controller.getRightTriggerAxis())));
+        gripSubsystem.setDefaultCommand(new GripCommand(
+            gripSubsystem,
+            () -> translateTriggers(controller.getLeftTriggerAxis(), controller.getRightTriggerAxis())));
     }
 
     /**
@@ -67,37 +67,37 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // Button 11 on the joystick zeros the gyroscope
-        new JoystickButton(m_joystick, 11)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyroscope()));
+        new JoystickButton(joystick, 11)
+            .onTrue(new InstantCommand(() -> drivetrainSubsystem.zeroGyroscope()));
         
         // Holding button 12 on the joystick slows drive speed
-        new JoystickButton(m_joystick, 12)
-            .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.5)))
-            .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDrivePercent(0.8)));
+        new JoystickButton(joystick, 12)
+            .onTrue(new InstantCommand(() -> drivetrainSubsystem.setDrivePercent(0.5)))
+            .onFalse(new InstantCommand(() -> drivetrainSubsystem.setDrivePercent(0.8)));
         
         // A sets manipulator to home position
-        new JoystickButton(m_controller, 1)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setHome()));
+        new JoystickButton(controller, 1)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setHome()));
 
         // X sets manipulator to floor position
-        new JoystickButton(m_controller, 3)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setFloor()));
+        new JoystickButton(controller, 3)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setFloor()));
 
         // Y sets manipulator to lower scoring position
-        new JoystickButton(m_controller, 4)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setTwo()));
+        new JoystickButton(controller, 4)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setTwo()));
 
         // B sets manipulator to higher scoring position
-        new JoystickButton(m_controller, 2)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setThree()));
+        new JoystickButton(controller, 2)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setThree()));
 
         // Right joystick button sets manipulator to player station position
-        new JoystickButton(m_controller, 10)
-            .onTrue(new InstantCommand(() -> m_manipulatorStateSubsystem.setPlayerArea()));
+        new JoystickButton(controller, 10)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setPlayerRamp()));
     }
 
     public void sendManipulatorHome() {
-        m_manipulatorStateSubsystem.setHome();
+        manipulatorSubsystem.setHome();
     }
 
     /**

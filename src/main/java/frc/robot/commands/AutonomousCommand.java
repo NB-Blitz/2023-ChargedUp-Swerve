@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GripSubsystem;
@@ -10,7 +12,10 @@ public class AutonomousCommand extends CommandBase {
     private final ManipulatorSubsystem manipulatorSubsystem;
     private final GripSubsystem gripSubsystem;
 
-    private int step = 1;
+    private Timer timer;
+
+    private int step = 0;
+    private boolean skip = true;
 
     public AutonomousCommand(DrivetrainSubsystem drivetrainSubsystem,
                              ManipulatorSubsystem manipulatorSubsystem,
@@ -20,11 +25,15 @@ public class AutonomousCommand extends CommandBase {
         this.gripSubsystem = gripSubsystem;
 
         addRequirements(drivetrainSubsystem, manipulatorSubsystem, gripSubsystem);
+
+        timer = new Timer();
     }
 
     @Override
     public void execute() {
         switch(step) {
+            case 0:
+                startTimer();
             case 1:
                 moveForward();
             case 2:
@@ -34,20 +43,28 @@ public class AutonomousCommand extends CommandBase {
         }
     }
 
+    private void startTimer() {
+        timer.start();
+        step = 1;
+    }
+
     private void moveForward() {
-        if (false) {
+        drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.5, 0));
+
+        if (timer.hasElapsed(1.5)) {
+            drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
             step = 2;
         }
     }
 
     private void dropPiece() {
-        if (false) {
+        if (skip) {
             step = 3;
         }
     }
 
     private void leaveCommunity() {
-        if (false) {
+        if (skip) {
             step = -1;
         }
     }

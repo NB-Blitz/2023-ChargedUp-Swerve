@@ -94,7 +94,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         targetTelescopeLength = TELESCOPE_LVL3;
     }
 
-    public void setPlayerRamp() { // Human player ramp
+    public void setPlayerShelf() { // Human player shelf
         presetMode = true;
         targetShoulderAngle = SHOULDER_PLAYER;
         targetTelescopeLength = TELESCOPE_PLAYER;
@@ -129,7 +129,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
             } else {
                 telescopeMotor.set(telescopeSpeed * TELESCOPE_SPEED_FAST_MULT);
             }
-        } /*else {
+        } else {
             // Use limit switches to go to home position instead of encoder values
             if (targetShoulderAngle == 0 && targetTelescopeLength == 0) {
                 if (isShoulderHome() || !telescopeSwitch.isPressed()) {
@@ -184,7 +184,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
                     telescopeMotor.set(0);
                 }
             }
-        }*/
+        }
 
         // Wrist Control
         if (presetMode && targetShoulderAngle == 0) {
@@ -195,7 +195,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
             targetWristAngle = 0;
         }
 
-        /*if (targetWristAngle == 0) {
+        if (targetWristAngle == 0) {
             if (getWristAngle() > targetWristAngle + ANGLE_ERROR && getWristAngle() < 360 - ANGLE_ERROR) {
                 if (getWristAngle() > 300) {
                     wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
@@ -225,8 +225,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
             } else {
                 wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
             }
-        }*/
-        wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_FAST_MULT);
+        }
+        //wristMotor.set(TalonSRXControlMode.PercentOutput, wristSpeed * WRIST_SPEED_FAST_MULT);
     }
 
     private double getShoulderAngle() {

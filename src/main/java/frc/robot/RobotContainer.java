@@ -44,7 +44,8 @@ public class RobotContainer {
             drivetrainSubsystem,
             () -> -modifyAxis(joystick.getY(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
             () -> -modifyAxis(joystick.getX(), 0.05) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(joystick.getTwist() * 0.6, 0.05) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+            () -> -modifyAxis(joystick.getTwist(), 0.05) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+            () -> joystick.getRawButton(12)
         ));
         
         manipulatorSubsystem.setDefaultCommand(new ManipulatorCommand(
@@ -66,14 +67,9 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        // Button 11 on the joystick zeros the gyroscope
+        // Button 11 on the joystick zeros the gyroscope controller button 8 is human player
         new JoystickButton(joystick, 11)
             .onTrue(new InstantCommand(() -> drivetrainSubsystem.zeroGyroscope()));
-        
-        // Holding button 12 on the joystick slows drive speed
-        new JoystickButton(joystick, 12)
-            .onTrue(new InstantCommand(() -> drivetrainSubsystem.setDrivePercent(0.5)))
-            .onFalse(new InstantCommand(() -> drivetrainSubsystem.setDrivePercent(0.8)));
         
         // A sets manipulator to home position
         new JoystickButton(controller, 1)
@@ -92,8 +88,8 @@ public class RobotContainer {
             .onTrue(new InstantCommand(() -> manipulatorSubsystem.setThree()));
 
         // Right joystick button sets manipulator to player station position
-        new JoystickButton(controller, 10)
-            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setPlayerRamp()));
+        new JoystickButton(controller, 8)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.setPlayerShelf()));
     }
 
     public void sendManipulatorHome() {

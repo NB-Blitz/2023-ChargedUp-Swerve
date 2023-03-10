@@ -64,7 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
     // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
     // cause the angle reading to increase until it wraps back over to zero.
-    private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+    private final AHRS navx = new AHRS(SPI.Port.kMXP); // NavX connected over MXP
     private double gyroOffset = 0.0;
     private double drivePercent = 1.0;
 
@@ -132,6 +132,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
             BACK_RIGHT_MODULE_STEER_ENCODER,
             BACK_RIGHT_MODULE_STEER_OFFSET
         );
+
+        zeroGyroscope();
     }
 
     /**

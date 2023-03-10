@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GripSubsystem;
@@ -14,26 +16,30 @@ public class AutonomousCommand extends CommandBase {
 
     private Timer timer;
 
-    private int step = 0;
+    private int step;
     private boolean skip = true;
 
-    public AutonomousCommand(DrivetrainSubsystem drivetrainSubsystem,
+    public AutonomousCommand(Timer timer,
+                             DrivetrainSubsystem drivetrainSubsystem,
                              ManipulatorSubsystem manipulatorSubsystem,
                              GripSubsystem gripSubsystem) {
+        this.timer = timer;
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.manipulatorSubsystem = manipulatorSubsystem;
         this.gripSubsystem = gripSubsystem;
 
         addRequirements(drivetrainSubsystem, manipulatorSubsystem, gripSubsystem);
 
-        timer = new Timer();
+        step = 1;
+
+        ShuffleboardTab tab = Shuffleboard.getTab("Autonomous");
+        tab.addInteger("Step", () -> step);
+        tab.addDouble("Time", () -> timer.get());
     }
 
     @Override
     public void execute() {
         switch(step) {
-            case 0:
-                startTimer();
             case 1:
                 moveForward();
             case 2:
@@ -43,15 +49,10 @@ public class AutonomousCommand extends CommandBase {
         }
     }
 
-    private void startTimer() {
-        timer.start();
-        step = 1;
-    }
-
     private void moveForward() {
-        drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.5, 0));
+        drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.5, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
 
-        if (timer.hasElapsed(1.5)) {
+        if (timer.get() > 2) {
             drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
             step = 2;
         }
@@ -71,6 +72,6 @@ public class AutonomousCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
     }
 }

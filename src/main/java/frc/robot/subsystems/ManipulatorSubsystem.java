@@ -113,7 +113,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
             // Shoulder Manual Control
             if ((isShoulderHome() && shoulderSpeed <= 0) ||
                 (getShoulderAngle() >= MAX_SHOULDER_ANGLE && shoulderSpeed >= 0) ||
-                (getShoulderAngle() <= SHOULDER_FLOOR + ANGLE_ERROR && shoulderSpeed < 0 && !telescopeSwitch.isPressed())) {
+                (getShoulderAngle() <= SHOULDER_FLOOR + SHOULDER_ANGLE_ERROR && shoulderSpeed < 0 && !telescopeSwitch.isPressed())) {
                 shoulderMotor.set(0);
             } else {
                 shoulderMotor.set(shoulderSpeed * SHOULDER_SPEED_FAST_MULT);
@@ -121,7 +121,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
             // Telescope Manual Control
             if ((getTelescopePos() >= MAX_TELESCOPE_ENCODER_VALUE && telescopeSpeed > 0) ||
-                (getShoulderAngle() < SHOULDER_FLOOR - ANGLE_ERROR && telescopeSpeed > 0)) {
+                (getShoulderAngle() < SHOULDER_FLOOR - SHOULDER_ANGLE_ERROR && telescopeSpeed > 0)) {
                 telescopeMotor.set(0);
             } else if ((getTelescopePos() < 20 && telescopeSpeed < 0) ||
                        (getTelescopePos() > MAX_TELESCOPE_ENCODER_VALUE - 20 && telescopeSpeed > 0)) {
@@ -149,13 +149,13 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 }
             } else {
                 // Shoulder Preset Control
-                if (getShoulderAngle() > targetShoulderAngle + ANGLE_ERROR) {
+                if (getShoulderAngle() > targetShoulderAngle + SHOULDER_ANGLE_ERROR) {
                     if (getShoulderAngle() - targetShoulderAngle < 10) {
                         shoulderMotor.set(-SHOULDER_SPEED_SLOW_MULT);
                     } else {
                         shoulderMotor.set(-SHOULDER_SPEED_FAST_MULT);
                     }
-                } else if (getShoulderAngle() < targetShoulderAngle - ANGLE_ERROR) {
+                } else if (getShoulderAngle() < targetShoulderAngle - SHOULDER_ANGLE_ERROR) {
                     if (targetShoulderAngle - getShoulderAngle() < 10) {
                         shoulderMotor.set(SHOULDER_SPEED_SLOW_MULT);
                     } else {
@@ -166,7 +166,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 }
 
                 // Telescope Preset Control
-                if (getShoulderAngle() < SHOULDER_FLOOR - ANGLE_ERROR) {
+                if (getShoulderAngle() < SHOULDER_FLOOR - SHOULDER_ANGLE_ERROR) {
                     telescopeMotor.set(0);
                 } else if (getTelescopePos() > targetTelescopeLength + TELESCOPE_ERROR) {
                     if (getTelescopePos() - targetTelescopeLength < 20) {
@@ -189,14 +189,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // Wrist Control
         if (presetMode && targetShoulderAngle == 0) {
             targetWristAngle = 0;
-        } else if (getShoulderAngle() >= SHOULDER_FLOOR - ANGLE_ERROR) {
+        } else if (getShoulderAngle() >= SHOULDER_FLOOR - SHOULDER_ANGLE_ERROR) {
             targetWristAngle = 90 + getShoulderAngle();
         } else {
             targetWristAngle = 0;
         }
 
         if (targetWristAngle == 0) {
-            if (getWristAngle() > targetWristAngle + ANGLE_ERROR && getWristAngle() < 360 - ANGLE_ERROR) {
+            if (getWristAngle() > targetWristAngle + WRIST_ANGLE_ERROR && getWristAngle() < 360 - WRIST_ANGLE_ERROR) {
                 if (getWristAngle() > 300) {
                     wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
                 } else if (getWristAngle() > 10) {
@@ -208,7 +208,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 wristMotor.set(TalonSRXControlMode.PercentOutput, 0);
             }
         } else {
-            if (getWristAngle() > targetWristAngle + ANGLE_ERROR) {
+            if (getWristAngle() > targetWristAngle + WRIST_ANGLE_ERROR) {
                 if (getWristAngle() > 300) {
                     wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_SLOW_MULT);
                 } else if (getWristAngle() - targetWristAngle > 10) {
@@ -216,7 +216,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 } else {
                     wristMotor.set(TalonSRXControlMode.PercentOutput, WRIST_SPEED_SLOW_MULT);
                 }
-            } else if (getWristAngle() < targetWristAngle - ANGLE_ERROR) {
+            } else if (getWristAngle() < targetWristAngle - WRIST_ANGLE_ERROR) {
                 if (targetWristAngle - getWristAngle() > 10) {
                     wristMotor.set(TalonSRXControlMode.PercentOutput, -WRIST_SPEED_FAST_MULT);
                 } else { 
@@ -234,7 +234,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     private boolean isShoulderHome() {
-        return shoulderSensor.getRawColor().red > 1000;
+        return shoulderSensor.getRawColor().red > 1100;
     }
 
     private double getTelescopePos() {

@@ -32,7 +32,7 @@ public class DriveTime extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(speed, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
+        drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(speed * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
     }
 
     @Override

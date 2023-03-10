@@ -86,10 +86,11 @@ public final class Constants {
     public static final double SHOULDER_LVL3 = 103.40;
     public static final double TELESCOPE_LVL3 = 180.0;
 
-    public static final double SHOULDER_PLAYER = 91;
+    public static final double SHOULDER_PLAYER = 89;
     public static final double TELESCOPE_PLAYER = 0;
 
-    public static final double ANGLE_ERROR = 2;
+    public static final double SHOULDER_ANGLE_ERROR = 1;
+    public static final double WRIST_ANGLE_ERROR = 2;
     public static final double TELESCOPE_ERROR = 5;
 }
 

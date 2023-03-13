@@ -17,6 +17,8 @@ import frc.robot.commands.ManipulatorCommand;
 import frc.robot.subsystems.GripSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,6 +33,12 @@ public class RobotContainer {
     private final GripSubsystem gripSubsystem = new GripSubsystem();
     private final Joystick joystick = new Joystick(0);
     private final XboxController controller = new XboxController(1);
+
+    private final SendableChooser<String> autoChooser = new SendableChooser<>();
+    private static final String kDefaultAuto = "nothing";
+    private static final String kMove = "move";
+    private static final String kScoreL = "scoreL";
+    private static final String kScoreR = "scoreR";
     
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -38,6 +46,12 @@ public class RobotContainer {
     public RobotContainer() {
         // Set up the default command for the drivetrain.
         // The controls are for field-oriented driving
+
+        autoChooser.setDefaultOption("Do nothing", kDefaultAuto);
+        autoChooser.addOption("Move", kMove);
+        autoChooser.addOption("Score High, Strafe Left", kScoreL);
+        autoChooser.addOption("Score High, Strafe Right", kScoreR);
+        Shuffleboard.getTab("Autonomous").add(autoChooser);
 
         configureButtonBindings();
         
@@ -91,10 +105,9 @@ public class RobotContainer {
         // Right joystick button sets manipulator to player station position
         new JoystickButton(controller, 8)
             .onTrue(new InstantCommand(() -> manipulatorSubsystem.setPlayerShelf()));
-    }
 
-    public void sendManipulatorHome() {
-        manipulatorSubsystem.setHome();
+        new JoystickButton(controller, 7)
+            .onTrue(new InstantCommand(() -> manipulatorSubsystem.killWrist(true)));
     }
 
     /**
@@ -103,7 +116,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new Autonomous(drivetrainSubsystem, manipulatorSubsystem, gripSubsystem);
+        return new Autonomous(autoChooser.getSelected(), drivetrainSubsystem, manipulatorSubsystem, gripSubsystem);
     }
 
     private static double deadband(double value, double deadband) {

@@ -37,7 +37,7 @@ public class DefaultDriveCommand extends CommandBase {
             drivetrainSubsystem.setDrivePercent(0.5);
             rot *= 0.3;
         } else {
-            drivetrainSubsystem.setDrivePercent(0.8);
+            drivetrainSubsystem.setDrivePercent(0.7);
             rot *= 0.4;
         }
         

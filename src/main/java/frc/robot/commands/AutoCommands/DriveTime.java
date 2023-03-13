@@ -8,13 +8,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DriveTime extends CommandBase {
-    private double speed;
+    private double x;
+    private double y;
+    private double rotation;
     private double time;
     private Timer timer;
     private DrivetrainSubsystem drivetrainSubsystem;
 
-    public DriveTime(double speed, double time, DrivetrainSubsystem drivetrainSubsystem) {
-        this.speed = speed;
+    public DriveTime(double x, double y, double rotation, double time, DrivetrainSubsystem drivetrainSubsystem) {
+        this.x = x;
+        this.y = y;
+        this.rotation = rotation;
         this.time = time;
         this.timer = new Timer();
         this.drivetrainSubsystem = drivetrainSubsystem;
@@ -32,12 +36,12 @@ public class DriveTime extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(speed * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
+        //drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(x * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND, y * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND, rotation * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND, drivetrainSubsystem.getGyroscopeRotation()));
     }
 
     @Override
     public boolean isFinished() {
-        return timer.get() > time;
+        return timer.get() >= time;
     }
 
     @Override

@@ -45,7 +45,7 @@ public final class Constants {
     public static final int SHOULDER_MOTOR_ID = 9;
 
     public static final double SHOULDER_SPEED_FAST_MULT = 0.9;
-    public static final double SHOULDER_SPEED_SLOW_MULT = 0.4;
+    public static final double SHOULDER_SPEED_SLOW_MULT = 0.3;
     public static final double SHOULDER_ANGLE_SCALE = 11;
     public static final double MAX_SHOULDER_ANGLE = 110;
 

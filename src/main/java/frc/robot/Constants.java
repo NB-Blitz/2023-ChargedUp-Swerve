@@ -64,7 +64,7 @@ public final class Constants {
 
     public static final double WRIST_SPEED_FAST_MULT = 1.0;
     public static final double WRIST_SPEED_SLOW_MULT = 0.25;
-    public static final double WRIST_ENCODER_OFFSET = 234.9;
+    public static final double WRIST_ENCODER_OFFSET = 292.5;
 
 
     /*************** Grip ***************/
